@@ -27,6 +27,11 @@
 					"typeStr": "6:rotation",
 					"name": "rotation",
 					"kind": null
+				},
+				{
+					"typeStr": "10:AlwaysOn",
+					"name": "flags",
+					"kind": null
 				}
 			],
 			"lines": [
@@ -60,7 +65,8 @@
 						"x": 0.5,
 						"y": 0.5
 					},
-					"rotation": "None"
+					"rotation": "None",
+					"flags": 0
 				},
 				{
 					"id": "I",
@@ -92,7 +98,8 @@
 						"x": 0.5,
 						"y": -0.5
 					},
-					"rotation": "I"
+					"rotation": "I",
+					"flags": 0
 				},
 				{
 					"id": "T",
@@ -124,7 +131,8 @@
 						"x": 0,
 						"y": 0
 					},
-					"rotation": "Main"
+					"rotation": "Main",
+					"flags": 0
 				},
 				{
 					"id": "L",
@@ -156,7 +164,8 @@
 						"x": 0,
 						"y": 0
 					},
-					"rotation": "Main"
+					"rotation": "Main",
+					"flags": 0
 				},
 				{
 					"id": "J",
@@ -188,7 +197,8 @@
 						"x": 0,
 						"y": 0
 					},
-					"rotation": "Main"
+					"rotation": "Main",
+					"flags": 0
 				},
 				{
 					"id": "S",
@@ -220,7 +230,8 @@
 						"x": 0,
 						"y": 0
 					},
-					"rotation": "Main"
+					"rotation": "Main",
+					"flags": 0
 				},
 				{
 					"id": "Z",
@@ -252,13 +263,455 @@
 						"x": 0,
 						"y": 0
 					},
-					"rotation": "Main"
+					"rotation": "Main",
+					"flags": 0
+				},
+				{
+					"id": "Source",
+					"blocks": [],
+					"pivot": {
+						"x": 0,
+						"y": 0
+					},
+					"rotation": "None",
+					"gfx": {
+						"file": "square.png",
+						"size": 40,
+						"x": 7,
+						"y": 0
+					},
+					"flags": 1
 				}
 			],
 			"separators": [],
 			"props": {
 				"hasIndex": true
 			}
+		},
+		{
+			"name": "road",
+			"columns": [
+				{
+					"typeStr": "14",
+					"name": "gfx",
+					"kind": null
+				},
+				{
+					"typeStr": "14",
+					"name": "activeGfx",
+					"kind": null
+				},
+				{
+					"typeStr": "8",
+					"name": "match",
+					"kind": null
+				}
+			],
+			"lines": [
+				{
+					"match": [
+						{
+							"v": true,
+							"comment": "top"
+						},
+						{
+							"v": true,
+							"comment": "right"
+						},
+						{
+							"v": true,
+							"comment": "bottom"
+						},
+						{
+							"v": true,
+							"comment": "left"
+						}
+					],
+					"gfx": {
+						"file": "square.png",
+						"size": 40,
+						"x": 0,
+						"y": 1
+					},
+					"activeGfx": {
+						"file": "square.png",
+						"size": 40,
+						"x": 0,
+						"y": 3
+					}
+				},
+				{
+					"match": [
+						{
+							"v": true,
+							"comment": "top"
+						},
+						{
+							"v": true,
+							"comment": "right"
+						},
+						{
+							"v": false,
+							"comment": "bottom"
+						},
+						{
+							"v": true,
+							"comment": "left"
+						}
+					],
+					"gfx": {
+						"file": "square.png",
+						"size": 40,
+						"x": 1,
+						"y": 1
+					},
+					"activeGfx": {
+						"file": "square.png",
+						"size": 40,
+						"x": 1,
+						"y": 3
+					}
+				},
+				{
+					"match": [
+						{
+							"v": true,
+							"comment": "top"
+						},
+						{
+							"v": true,
+							"comment": "right"
+						},
+						{
+							"v": true,
+							"comment": "bottom"
+						},
+						{
+							"v": false,
+							"comment": "left"
+						}
+					],
+					"gfx": {
+						"file": "square.png",
+						"size": 40,
+						"x": 2,
+						"y": 1
+					},
+					"activeGfx": {
+						"file": "square.png",
+						"size": 40,
+						"x": 2,
+						"y": 3
+					}
+				},
+				{
+					"match": [
+						{
+							"v": false,
+							"comment": "top"
+						},
+						{
+							"v": true,
+							"comment": "right"
+						},
+						{
+							"v": true,
+							"comment": "bottom"
+						},
+						{
+							"v": true,
+							"comment": "left"
+						}
+					],
+					"gfx": {
+						"file": "square.png",
+						"size": 40,
+						"x": 3,
+						"y": 1
+					},
+					"activeGfx": {
+						"file": "square.png",
+						"size": 40,
+						"x": 3,
+						"y": 3
+					}
+				},
+				{
+					"match": [
+						{
+							"v": true,
+							"comment": "top"
+						},
+						{
+							"v": false,
+							"comment": "right"
+						},
+						{
+							"v": true,
+							"comment": "bottom"
+						},
+						{
+							"v": true,
+							"comment": "left"
+						}
+					],
+					"gfx": {
+						"file": "square.png",
+						"size": 40,
+						"x": 4,
+						"y": 1
+					},
+					"activeGfx": {
+						"file": "square.png",
+						"size": 40,
+						"x": 4,
+						"y": 3
+					}
+				},
+				{
+					"match": [
+						{
+							"v": true,
+							"comment": "top"
+						},
+						{
+							"v": false,
+							"comment": "right"
+						},
+						{
+							"v": false,
+							"comment": "bottom"
+						},
+						{
+							"v": true,
+							"comment": "left"
+						}
+					],
+					"gfx": {
+						"file": "square.png",
+						"size": 40,
+						"x": 0,
+						"y": 2
+					},
+					"activeGfx": {
+						"file": "square.png",
+						"size": 40,
+						"x": 0,
+						"y": 4
+					}
+				},
+				{
+					"match": [
+						{
+							"v": true,
+							"comment": "top"
+						},
+						{
+							"v": true,
+							"comment": "right"
+						},
+						{
+							"v": false,
+							"comment": "bottom"
+						},
+						{
+							"v": false,
+							"comment": "left"
+						}
+					],
+					"gfx": {
+						"file": "square.png",
+						"size": 40,
+						"x": 1,
+						"y": 2
+					},
+					"activeGfx": {
+						"file": "square.png",
+						"size": 40,
+						"x": 1,
+						"y": 4
+					}
+				},
+				{
+					"match": [
+						{
+							"v": false,
+							"comment": "top"
+						},
+						{
+							"v": false,
+							"comment": "right"
+						},
+						{
+							"v": true,
+							"comment": "bottom"
+						},
+						{
+							"v": true,
+							"comment": "left"
+						}
+					],
+					"gfx": {
+						"file": "square.png",
+						"size": 40,
+						"x": 2,
+						"y": 2
+					},
+					"activeGfx": {
+						"file": "square.png",
+						"size": 40,
+						"x": 2,
+						"y": 4
+					}
+				},
+				{
+					"match": [
+						{
+							"v": false,
+							"comment": "top"
+						},
+						{
+							"v": true,
+							"comment": "right"
+						},
+						{
+							"v": true,
+							"comment": "bottom"
+						},
+						{
+							"v": false,
+							"comment": "left"
+						}
+					],
+					"gfx": {
+						"file": "square.png",
+						"size": 40,
+						"x": 3,
+						"y": 2
+					},
+					"activeGfx": {
+						"file": "square.png",
+						"size": 40,
+						"x": 3,
+						"y": 4
+					}
+				},
+				{
+					"match": [
+						{
+							"v": true,
+							"comment": "top"
+						},
+						{
+							"v": false,
+							"comment": "right"
+						},
+						{
+							"v": true,
+							"comment": "bottom"
+						},
+						{
+							"v": false,
+							"comment": "left"
+						}
+					],
+					"gfx": {
+						"file": "square.png",
+						"size": 40,
+						"x": 5,
+						"y": 1
+					},
+					"activeGfx": {
+						"file": "square.png",
+						"size": 40,
+						"x": 5,
+						"y": 3
+					}
+				},
+				{
+					"match": [
+						{
+							"v": false,
+							"comment": "top"
+						},
+						{
+							"v": true,
+							"comment": "right"
+						},
+						{
+							"v": false,
+							"comment": "bottom"
+						},
+						{
+							"v": true,
+							"comment": "left"
+						}
+					],
+					"gfx": {
+						"file": "square.png",
+						"size": 40,
+						"x": 6,
+						"y": 1
+					},
+					"activeGfx": {
+						"file": "square.png",
+						"size": 40,
+						"x": 6,
+						"y": 3
+					}
+				},
+				{
+					"match": [
+						{
+							"v": false
+						},
+						{
+							"v": false
+						},
+						{
+							"v": false
+						},
+						{
+							"v": false
+						}
+					],
+					"gfx": {
+						"file": "square.png",
+						"size": 40,
+						"x": 7,
+						"y": 1
+					},
+					"activeGfx": {
+						"file": "square.png",
+						"size": 40,
+						"x": 7,
+						"y": 3
+					}
+				}
+			],
+			"separators": [],
+			"props": {}
+		},
+		{
+			"name": "road@match",
+			"props": {
+				"hide": true
+			},
+			"separators": [],
+			"lines": [],
+			"columns": [
+				{
+					"typeStr": "2",
+					"name": "v",
+					"kind": null
+				},
+				{
+					"typeStr": "1",
+					"name": "comment",
+					"opt": true,
+					"kind": null
+				}
+			]
 		},
 		{
 			"name": "rotation",

@@ -520,3 +520,78 @@ class ExtensionsUI {
 		return hxd.Res.load(p.file).toTile().sub(p.x * p.size, p.y * p.size, w, h);
 	}
 }
+
+@:genericClassPerMethod
+class CDBUtils {
+	inline static public function find<C>( a: cdb.Types.ArrayRead<C>, f : C -> Bool ) : Null<C> {
+		var ret = null;
+		for( v in a ) {
+			if(f(v)) {
+				ret = v;
+				break;
+			}
+		}
+		return ret;
+	}
+	inline static public function findIndex<C>( a: cdb.Types.ArrayRead<C>, f : C -> Bool ) : Int {
+		var i = 0;
+		while (i < a.length ) {
+			if(f(a[i]))
+				break;
+			i++;
+		}
+		if (i >= a.length)
+			i = -1;
+		return i;
+	}
+
+	inline static public function count<C>( a: cdb.Types.ArrayRead<C>, f : C -> Bool ) : Int {
+		var cnt = 0;
+		for( v in a ) {
+			if(f(v))
+				cnt++;
+		}
+		return cnt;
+	}
+
+	/**
+		Iterate over all items starting from a random index, until func returns a non-null value
+	**/
+	inline public static function findRandCdb<T, R>(a: cdb.Types.ArrayRead<T>, func: Int->T->R) : R {
+		var len = a.length;
+		var offset = Std.random(len);
+		var ret : R = null;
+		for(i in 0...len) {
+			var idx = (i + offset) % len;
+			var item = a[idx];
+			ret = func(idx, item);
+			if(ret != null) {
+				break;
+			}
+		}
+		return ret;
+	}
+
+	inline public static function any<T>( it : cdb.Types.ArrayRead<T>, f : T -> Bool ) : Bool {
+		return find(it, f) != null;
+	}
+	inline public static function exists<T>( it : cdb.Types.ArrayRead<T>, f : T -> Bool ) : Bool {
+		return find(it, f) != null;
+	}
+	inline public static function all<T>( it : cdb.Types.ArrayRead<T>, f : T -> Bool ) : Bool {
+		return count(it, f) >= it.length;
+	}
+	inline public static function forEach<T>( it : cdb.Types.ArrayRead<T>, f : T -> Void ) : Void {
+		for( v in it )
+			f(v);
+	}
+
+	public static function pickRandom<T>(a: cdb.Types.ArrayRead<T>) {
+		if(a.length == 0) return null;
+		return a[Std.random(a.length)];
+	}
+
+	inline public static function isEmpty<T>(a : cdb.Types.ArrayRead<T>) : Bool {
+		return a.length <= 0;
+	}
+}
