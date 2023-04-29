@@ -1,0 +1,15 @@
+-lib heaps
+-lib castle
+-lib domkit
+-lib hlsdl
+
+-D windowSize=1024x950
+-D domkit_heaps
+-D debug
+
+-hl lightris.hl
+-main Lightris
+-cp ../..
+-cp .
+
+-dce full
