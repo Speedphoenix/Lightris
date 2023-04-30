@@ -29,8 +29,12 @@
 					"kind": null
 				},
 				{
-					"typeStr": "10:AlwaysOn",
-					"name": "flags",
+					"typeStr": "10:AlwaysOn,Empty",
+					"name": "flags"
+				},
+				{
+					"typeStr": "17",
+					"name": "props",
 					"kind": null
 				}
 			],
@@ -38,9 +42,9 @@
 				{
 					"id": "O",
 					"gfx": {
-						"file": "square.png",
-						"size": 40,
-						"x": 0,
+						"file": "SpriteSheetBloc.png",
+						"size": 32,
+						"x": 5,
 						"y": 0
 					},
 					"blocks": [
@@ -66,14 +70,15 @@
 						"y": 0.5
 					},
 					"rotation": "None",
-					"flags": 0
+					"flags": 0,
+					"props": {}
 				},
 				{
 					"id": "I",
 					"gfx": {
-						"file": "square.png",
-						"size": 40,
-						"x": 1,
+						"file": "SpriteSheetBloc.png",
+						"size": 32,
+						"x": 4,
 						"y": 0
 					},
 					"blocks": [
@@ -99,13 +104,14 @@
 						"y": -0.5
 					},
 					"rotation": "I",
-					"flags": 0
+					"flags": 0,
+					"props": {}
 				},
 				{
 					"id": "T",
 					"gfx": {
-						"file": "square.png",
-						"size": 40,
+						"file": "SpriteSheetBloc.png",
+						"size": 32,
 						"x": 2,
 						"y": 0
 					},
@@ -132,52 +138,58 @@
 						"y": 0
 					},
 					"rotation": "Main",
-					"flags": 0
+					"flags": 0,
+					"props": {
+						"sideOffset": 0.5
+					}
 				},
 				{
 					"id": "L",
 					"gfx": {
-						"file": "square.png",
-						"size": 40,
+						"file": "SpriteSheetBloc.png",
+						"size": 32,
+						"x": 1,
+						"y": 0
+					},
+					"blocks": [
+						{
+							"x": -1,
+							"y": 0
+						},
+						{
+							"x": 0,
+							"y": 0
+						},
+						{
+							"x": 1,
+							"y": 0
+						},
+						{
+							"x": 1,
+							"y": 1
+						}
+					],
+					"pivot": {
+						"x": 0,
+						"y": 0
+					},
+					"rotation": "Main",
+					"flags": 0,
+					"props": {
+						"sideOffset": 0.5
+					}
+				},
+				{
+					"id": "J",
+					"gfx": {
+						"file": "SpriteSheetBloc.png",
+						"size": 32,
 						"x": 3,
 						"y": 0
 					},
 					"blocks": [
 						{
 							"x": -1,
-							"y": 0
-						},
-						{
-							"x": 0,
-							"y": 0
-						},
-						{
-							"x": 1,
-							"y": 0
-						},
-						{
-							"x": 1,
-							"y": 1
-						}
-					],
-					"pivot": {
-						"x": 0,
-						"y": 0
-					},
-					"rotation": "Main",
-					"flags": 0
-				},
-				{
-					"id": "J",
-					"gfx": {
-						"file": "square.png",
-						"size": 40,
-						"x": 4,
-						"y": 0
-					},
-					"blocks": [
-						{
-							"x": -1,
 							"y": 1
 						},
 						{
@@ -198,14 +210,17 @@
 						"y": 0
 					},
 					"rotation": "Main",
-					"flags": 0
+					"flags": 0,
+					"props": {
+						"sideOffset": 0.5
+					}
 				},
 				{
 					"id": "S",
 					"gfx": {
-						"file": "square.png",
-						"size": 40,
-						"x": 5,
+						"file": "SpriteSheetBloc.png",
+						"size": 32,
+						"x": 7,
 						"y": 0
 					},
 					"blocks": [
@@ -231,13 +246,16 @@
 						"y": 0
 					},
 					"rotation": "Main",
-					"flags": 0
+					"flags": 0,
+					"props": {
+						"sideOffset": 0.5
+					}
 				},
 				{
 					"id": "Z",
 					"gfx": {
-						"file": "square.png",
-						"size": 40,
+						"file": "SpriteSheetBloc.png",
+						"size": 32,
 						"x": 6,
 						"y": 0
 					},
@@ -264,10 +282,13 @@
 						"y": 0
 					},
 					"rotation": "Main",
-					"flags": 0
+					"flags": 0,
+					"props": {
+						"sideOffset": 0.5
+					}
 				},
 				{
-					"id": "Source",
+					"id": "SourceL",
 					"blocks": [],
 					"pivot": {
 						"x": 0,
@@ -276,11 +297,46 @@
 					"rotation": "None",
 					"gfx": {
 						"file": "square.png",
-						"size": 40,
-						"x": 7,
+						"size": 32,
+						"x": 9,
 						"y": 0
 					},
-					"flags": 1
+					"flags": 1,
+					"props": {}
+				},
+				{
+					"id": "SourceR",
+					"blocks": [],
+					"pivot": {
+						"x": 0,
+						"y": 0
+					},
+					"rotation": "None",
+					"flags": 1,
+					"props": {},
+					"gfx": {
+						"file": "square.png",
+						"size": 32,
+						"x": 9,
+						"y": 0
+					}
+				},
+				{
+					"id": "Background",
+					"blocks": [],
+					"pivot": {
+						"x": 0,
+						"y": 0
+					},
+					"rotation": "Main",
+					"flags": 2,
+					"gfx": {
+						"file": "SpriteSheetBloc.png",
+						"size": 32,
+						"x": 0,
+						"y": 0
+					},
+					"props": {}
 				}
 			],
 			"separators": [],
@@ -328,16 +384,16 @@
 						}
 					],
 					"gfx": {
-						"file": "square.png",
-						"size": 40,
+						"file": "SpriteSheetRoad.png",
+						"size": 32,
+						"x": 0,
+						"y": 0
+					},
+					"activeGfx": {
+						"file": "SpriteSheetRoad.png",
+						"size": 32,
 						"x": 0,
 						"y": 1
-					},
-					"activeGfx": {
-						"file": "square.png",
-						"size": 40,
-						"x": 0,
-						"y": 3
 					}
 				},
 				{
@@ -360,16 +416,16 @@
 						}
 					],
 					"gfx": {
-						"file": "square.png",
-						"size": 40,
+						"file": "SpriteSheetRoad.png",
+						"size": 32,
+						"x": 1,
+						"y": 0
+					},
+					"activeGfx": {
+						"file": "SpriteSheetRoad.png",
+						"size": 32,
 						"x": 1,
 						"y": 1
-					},
-					"activeGfx": {
-						"file": "square.png",
-						"size": 40,
-						"x": 1,
-						"y": 3
 					}
 				},
 				{
@@ -392,16 +448,16 @@
 						}
 					],
 					"gfx": {
-						"file": "square.png",
-						"size": 40,
+						"file": "SpriteSheetRoad.png",
+						"size": 32,
+						"x": 2,
+						"y": 0
+					},
+					"activeGfx": {
+						"file": "SpriteSheetRoad.png",
+						"size": 32,
 						"x": 2,
 						"y": 1
-					},
-					"activeGfx": {
-						"file": "square.png",
-						"size": 40,
-						"x": 2,
-						"y": 3
 					}
 				},
 				{
@@ -424,16 +480,16 @@
 						}
 					],
 					"gfx": {
-						"file": "square.png",
-						"size": 40,
+						"file": "SpriteSheetRoad.png",
+						"size": 32,
+						"x": 3,
+						"y": 0
+					},
+					"activeGfx": {
+						"file": "SpriteSheetRoad.png",
+						"size": 32,
 						"x": 3,
 						"y": 1
-					},
-					"activeGfx": {
-						"file": "square.png",
-						"size": 40,
-						"x": 3,
-						"y": 3
 					}
 				},
 				{
@@ -456,16 +512,16 @@
 						}
 					],
 					"gfx": {
-						"file": "square.png",
-						"size": 40,
+						"file": "SpriteSheetRoad.png",
+						"size": 32,
+						"x": 4,
+						"y": 0
+					},
+					"activeGfx": {
+						"file": "SpriteSheetRoad.png",
+						"size": 32,
 						"x": 4,
 						"y": 1
-					},
-					"activeGfx": {
-						"file": "square.png",
-						"size": 40,
-						"x": 4,
-						"y": 3
 					}
 				},
 				{
@@ -488,204 +544,204 @@
 						}
 					],
 					"gfx": {
-						"file": "square.png",
-						"size": 40,
-						"x": 0,
-						"y": 2
+						"file": "SpriteSheetRoad.png",
+						"size": 32,
+						"x": 7,
+						"y": 0
 					},
 					"activeGfx": {
-						"file": "square.png",
-						"size": 40,
-						"x": 0,
-						"y": 4
-					}
-				},
-				{
-					"match": [
-						{
-							"v": true,
-							"comment": "top"
-						},
-						{
-							"v": true,
-							"comment": "right"
-						},
-						{
-							"v": false,
-							"comment": "bottom"
-						},
-						{
-							"v": false,
-							"comment": "left"
-						}
-					],
-					"gfx": {
-						"file": "square.png",
-						"size": 40,
-						"x": 1,
-						"y": 2
-					},
-					"activeGfx": {
-						"file": "square.png",
-						"size": 40,
-						"x": 1,
-						"y": 4
-					}
-				},
-				{
-					"match": [
-						{
-							"v": false,
-							"comment": "top"
-						},
-						{
-							"v": false,
-							"comment": "right"
-						},
-						{
-							"v": true,
-							"comment": "bottom"
-						},
-						{
-							"v": true,
-							"comment": "left"
-						}
-					],
-					"gfx": {
-						"file": "square.png",
-						"size": 40,
-						"x": 2,
-						"y": 2
-					},
-					"activeGfx": {
-						"file": "square.png",
-						"size": 40,
-						"x": 2,
-						"y": 4
-					}
-				},
-				{
-					"match": [
-						{
-							"v": false,
-							"comment": "top"
-						},
-						{
-							"v": true,
-							"comment": "right"
-						},
-						{
-							"v": true,
-							"comment": "bottom"
-						},
-						{
-							"v": false,
-							"comment": "left"
-						}
-					],
-					"gfx": {
-						"file": "square.png",
-						"size": 40,
-						"x": 3,
-						"y": 2
-					},
-					"activeGfx": {
-						"file": "square.png",
-						"size": 40,
-						"x": 3,
-						"y": 4
-					}
-				},
-				{
-					"match": [
-						{
-							"v": true,
-							"comment": "top"
-						},
-						{
-							"v": false,
-							"comment": "right"
-						},
-						{
-							"v": true,
-							"comment": "bottom"
-						},
-						{
-							"v": false,
-							"comment": "left"
-						}
-					],
-					"gfx": {
-						"file": "square.png",
-						"size": 40,
-						"x": 5,
-						"y": 1
-					},
-					"activeGfx": {
-						"file": "square.png",
-						"size": 40,
-						"x": 5,
-						"y": 3
-					}
-				},
-				{
-					"match": [
-						{
-							"v": false,
-							"comment": "top"
-						},
-						{
-							"v": true,
-							"comment": "right"
-						},
-						{
-							"v": false,
-							"comment": "bottom"
-						},
-						{
-							"v": true,
-							"comment": "left"
-						}
-					],
-					"gfx": {
-						"file": "square.png",
-						"size": 40,
-						"x": 6,
-						"y": 1
-					},
-					"activeGfx": {
-						"file": "square.png",
-						"size": 40,
-						"x": 6,
-						"y": 3
-					}
-				},
-				{
-					"match": [
-						{
-							"v": false
-						},
-						{
-							"v": false
-						},
-						{
-							"v": false
-						},
-						{
-							"v": false
-						}
-					],
-					"gfx": {
-						"file": "square.png",
-						"size": 40,
+						"file": "SpriteSheetRoad.png",
+						"size": 32,
 						"x": 7,
 						"y": 1
+					}
+				},
+				{
+					"match": [
+						{
+							"v": true,
+							"comment": "top"
+						},
+						{
+							"v": true,
+							"comment": "right"
+						},
+						{
+							"v": false,
+							"comment": "bottom"
+						},
+						{
+							"v": false,
+							"comment": "left"
+						}
+					],
+					"gfx": {
+						"file": "SpriteSheetRoad.png",
+						"size": 32,
+						"x": 8,
+						"y": 0
 					},
 					"activeGfx": {
-						"file": "square.png",
-						"size": 40,
-						"x": 7,
-						"y": 3
+						"file": "SpriteSheetRoad.png",
+						"size": 32,
+						"x": 8,
+						"y": 1
+					}
+				},
+				{
+					"match": [
+						{
+							"v": false,
+							"comment": "top"
+						},
+						{
+							"v": false,
+							"comment": "right"
+						},
+						{
+							"v": true,
+							"comment": "bottom"
+						},
+						{
+							"v": true,
+							"comment": "left"
+						}
+					],
+					"gfx": {
+						"file": "SpriteSheetRoad.png",
+						"size": 32,
+						"x": 6,
+						"y": 0
+					},
+					"activeGfx": {
+						"file": "SpriteSheetRoad.png",
+						"size": 32,
+						"x": 6,
+						"y": 1
+					}
+				},
+				{
+					"match": [
+						{
+							"v": false,
+							"comment": "top"
+						},
+						{
+							"v": true,
+							"comment": "right"
+						},
+						{
+							"v": true,
+							"comment": "bottom"
+						},
+						{
+							"v": false,
+							"comment": "left"
+						}
+					],
+					"gfx": {
+						"file": "SpriteSheetRoad.png",
+						"size": 32,
+						"x": 5,
+						"y": 0
+					},
+					"activeGfx": {
+						"file": "SpriteSheetRoad.png",
+						"size": 32,
+						"x": 5,
+						"y": 1
+					}
+				},
+				{
+					"match": [
+						{
+							"v": true,
+							"comment": "top"
+						},
+						{
+							"v": false,
+							"comment": "right"
+						},
+						{
+							"v": true,
+							"comment": "bottom"
+						},
+						{
+							"v": false,
+							"comment": "left"
+						}
+					],
+					"gfx": {
+						"file": "SpriteSheetRoad.png",
+						"size": 32,
+						"x": 10,
+						"y": 0
+					},
+					"activeGfx": {
+						"file": "SpriteSheetRoad.png",
+						"size": 32,
+						"x": 10,
+						"y": 1
+					}
+				},
+				{
+					"match": [
+						{
+							"v": false,
+							"comment": "top"
+						},
+						{
+							"v": true,
+							"comment": "right"
+						},
+						{
+							"v": false,
+							"comment": "bottom"
+						},
+						{
+							"v": true,
+							"comment": "left"
+						}
+					],
+					"gfx": {
+						"file": "SpriteSheetRoad.png",
+						"size": 32,
+						"x": 9,
+						"y": 0
+					},
+					"activeGfx": {
+						"file": "SpriteSheetRoad.png",
+						"size": 32,
+						"x": 9,
+						"y": 1
+					}
+				},
+				{
+					"match": [
+						{
+							"v": false
+						},
+						{
+							"v": false
+						},
+						{
+							"v": false
+						},
+						{
+							"v": false
+						}
+					],
+					"gfx": {
+						"file": "SpriteSheetRoad.png",
+						"size": 32,
+						"x": 11,
+						"y": 0
+					},
+					"activeGfx": {
+						"file": "SpriteSheetRoad.png",
+						"size": 32,
+						"x": 11,
+						"y": 1
 					}
 				}
 			],
@@ -1325,6 +1381,23 @@
 				{
 					"typeStr": "4",
 					"name": "y",
+					"kind": null
+				}
+			]
+		},
+		{
+			"name": "mino@props",
+			"props": {
+				"hide": true,
+				"isProps": true
+			},
+			"separators": [],
+			"lines": [],
+			"columns": [
+				{
+					"typeStr": "4",
+					"name": "sideOffset",
+					"opt": true,
 					"kind": null
 				}
 			]

@@ -2,11 +2,19 @@
 import hxd.Key as K;
 using Extensions;
 using Const;
+using Main;
 
 // TODO TOMORROW
-// force piece to have at least two blocks connected
-// piece should have exits on different directions, on at least two blocks
+// defeat condition
 // make target/goal block or checkpoint
+// add designed pieces
+// gravity
+// auto lock
+
+enum RandomMode {
+	FullRandom;
+	Bag;
+}
 
 class SceneObject extends h2d.Object implements h2d.domkit.Object {
 	public function new(?parent) {
@@ -14,6 +22,7 @@ class SceneObject extends h2d.Object implements h2d.domkit.Object {
 		initComponent();
 	}
 }
+
 class SceneBitmap extends h2d.Bitmap implements h2d.domkit.Object {
 	public function new(?tile : h2d.Tile, ?parent : h2d.Object) {
 		super(tile, parent);
@@ -21,9 +30,76 @@ class SceneBitmap extends h2d.Bitmap implements h2d.domkit.Object {
 	}
 }
 
-enum RandomMode {
-	FullRandom;
-	Bag;
+@:uiComp("board-ui")
+class BoardUI extends h2d.Flow implements h2d.domkit.Object {
+    static var SRC = <board-ui
+		fill-width={true}
+		content-halign={h2d.Flow.FlowAlign.Middle}
+		spacing={{x: 10, y: 0}}
+	>
+		<flow class="hold-cont" id
+			valign={h2d.Flow.FlowAlign.Top}
+			background={panelBG}
+			margin-top={topMargin}
+			padding={padding}
+			layout={h2d.Flow.FlowLayout.Vertical}
+			content-halign={h2d.Flow.FlowAlign.Middle}
+		>
+			<text text={"HOLD"}/>
+			<flow id="currHold" public
+				min-width={pieceWidth}
+				min-height={pieceHeight}
+				offset-x={Const.SIDE}
+			/>
+		</flow>
+		<flow class="board-cont" id public/>
+		<flow class="next-cont" id
+			valign={h2d.Flow.FlowAlign.Top}
+			background={panelBG}
+			margin-top={topMargin}
+			padding={padding}
+			spacing={{x: 0, y: pad}}
+			layout={h2d.Flow.FlowLayout.Vertical}
+			content-halign={h2d.Flow.FlowAlign.Middle}
+		>
+			<text text={"NEXT"}/>
+			${for (i in 0...Const.NEXT_QUEUE_SIZE) {
+				<flow id="nextPieces[]" public
+					min-width={pieceWidth}
+					min-height={pieceHeight}
+					offset-x={Const.SIDE}
+				/>
+			}}
+		</flow>
+	</board-ui>
+
+    public function new(?parent) {
+		super(parent);
+		var panelBG = {
+			tile : hxd.Res.panel_bg.toTile(),
+			borderL : 4,
+			borderT : 4,
+			borderR : 4,
+			borderB : 4,
+		};
+
+		var topMargin = Const.BOARD_TOP_EXTRA * Const.SIDE;
+		var pieceWidth = 4 * Const.SIDE;
+		var pieceHeight = 2 * Const.SIDE;
+		var pad = 20;
+		var padding = {
+			top: pad,
+			right: pad,
+			bottom: pad - 1, // mod 4
+			left: pad,
+		};
+
+		initComponent();
+		holdCont.background.tileCenter = true;
+		nextCont.background.tileCenter = true;
+		holdCont.background.tileBorders = true;
+		nextCont.background.tileBorders = true;
+	}
 }
 
 class RandomProvider {
@@ -68,6 +144,7 @@ class Block {
 	public var roads = [false, false, false, false];
 
 	public var on = false;
+	public var isEmpty = false;
 
 	public function new(x, y, inf: Data.Mino, ?parent) {
 		this.inf = inf;
@@ -75,6 +152,7 @@ class Block {
 		var bg = new SceneBitmap(inf.gfx.toTile(), obj);
 		roadBmp = new SceneBitmap(null, obj);
 		this.on = alwaysOn();
+		this.isEmpty = inf.flags.has(Empty);
 
 		obj.dom.addClass("block");
 		this.x = x;
@@ -82,8 +160,9 @@ class Block {
 		updatePos();
 	}
 
-	public function updatePos() {
-		obj.x = x * Const.SIDE;
+	public function updatePos(sides = false) {
+		var offs = (sides && inf.props.sideOffset != null) ? inf.props.sideOffset : 0.;
+		obj.x = (x + offs) * Const.SIDE;
 		obj.y = (y + 1) * Const.SIDE * -1;
 
 		var roadInf = Data.road.all.find(function(r) {
@@ -116,22 +195,41 @@ class Piece {
 	public var inf: Data.Mino;
 	public var rotation: Direction = Up;
 
+	function fToString(v: Float, prec=5) {
+		var p = Math.pow(10, prec);
+		var val = Math.round(p * v);
+		var fullDec = Std.string(val);
+		var outStr = fullDec.substr(0, -prec) + '.' + fullDec.substr(fullDec.length - prec, prec);
+		return outStr;
+	}
+
 	public function new(i: Int, ?parent) {
 		obj = new SceneObject(parent);
 		inf = Data.mino.all[i];
 		obj.dom.addClass(inf.id.toString().toLowerCase());
 		blocks = [for (b in inf.blocks) new Block(b.x, b.y, inf, obj)];
+
+		// tryAll();
+
 		var stamp = haxe.Timer.stamp();
 		shuffleRoads();
 		var tries = 0;
 		while (!areRoadsValid()) {
 			tries++;
 			shuffleRoads();
-			if (tries > 1000)
+			if (tries > 2000) {
+				iterateRec(0, 0, areRoadsValid);
 				break;
+			}
 		}
 		var elapsed = haxe.Timer.stamp() - stamp;
-		trace('Block ${inf.id} took $tries tries to find ($elapsed s). Valid: ${areRoadsValid()}');
+		var elapsedStr = fToString(elapsed);
+		if (tries > 2000)
+			trace("TOOK ALL TRIES, FALLBACK");
+		trace('Block ${inf.id} took $tries tries to find ($elapsedStr, $elapsed s). Valid: ${areRoadsValid()}');
+	}
+
+	public function reset() {
 		x = 4;
 		y = Const.BOARD_HEIGHT - 1;
 		updatePos();
@@ -156,11 +254,11 @@ class Piece {
 	}
 
 	var pivotG = null;
-	public function updatePos() {
+	public function updatePos(sides = false) {
 		obj.x = x * Const.SIDE;
 		obj.y = y * Const.SIDE * -1;
 		for (b in blocks)
-			b.updatePos();
+			b.updatePos(sides);
 		#if debug
 		if (pivotG == null)
 			pivotG = new h2d.Graphics(obj);
@@ -199,13 +297,51 @@ class Piece {
 
 	function shuffleRoads() {
 		inline function randBool() {
-			return Lightris.rnd.random(2) == 0;
+			return Board.rnd.random(2) == 0;
 		}
 		for (b in blocks) {
 			for (i in 0...4) {
 				b.roads[i] = randBool();
 			}
 		}
+	}
+
+	function iterateRec(bi: Int, ri: Int, callb: Void -> Bool) {
+		inline function iterNext() {
+			return if (ri < 3) {
+				iterateRec(bi, ri + 1, callb);
+			} else if (bi < 3) {
+				iterateRec(bi + 1, 0, callb);
+			} else {
+				callb();
+			}
+			// return false;
+		}
+		blocks[bi].roads[ri] = false;
+		if (iterNext())
+			return true;
+		blocks[bi].roads[ri] = true;
+		if (iterNext())
+			return true;
+		return false;
+	}
+
+	function tryAll() {
+		var stamp = haxe.Timer.stamp();
+		var valids = 0;
+		var invalids = 0;
+		var tries = 0;
+		iterateRec(0, 0, function() {
+			if (areRoadsValid())
+				valids++;
+			else
+				invalids++;
+			tries++;
+			return false;
+		});
+		var elapsed = haxe.Timer.stamp() - stamp;
+		var elapsedStr = fToString(elapsed);
+		trace('Block ${inf.id} valid: $valids invalid: $invalids elapsed: ($elapsedStr) $elapsed s (total $tries)');
 	}
 
 	function checkRec(curr: Block, toCheck: Array<Block>, exits: Array<Array<Bool>>) {
@@ -252,27 +388,31 @@ class Piece {
 			return false;
 		if (toCheck.length > 0) // unconnected block inside
 			return false;
-		var found = 0;
+		var separateExitSets = 0;
+		var exitBlocks = 0;
 		for (i in 0...exits.length) {
+			var hasExit = false;
 			for (j in 0...exits[i].length) {
 				if (exits[i][j]) {
+					if (!hasExit) {
+						exitBlocks++;
+						hasExit = true;
+					}
 
 					for (i2 in (i + 1)...exits.length) {
 						for (j2 in 0...exits[i2].length) {
 							if (j2 == j)
 								continue;
 							if (exits[i2][j2])
-								found++;
-							if (found > Const.MIN_SEPARATE_EXITS) break;
+								separateExitSets++;
 						}
-						if (found > Const.MIN_SEPARATE_EXITS) break;
 					}
 				}
-				if (found > Const.MIN_SEPARATE_EXITS) break;
 			}
-			if (found > Const.MIN_SEPARATE_EXITS) break;
 		}
-		if (found < Const.MIN_SEPARATE_EXITS)
+		if (separateExitSets < Const.MIN_SEPARATE_EXITS)
+			return false;
+		if (exitBlocks > Const.MAX_EXIT_BLOCKS || exitBlocks < Const.MIN_EXIT_BLOCKS)
 			return false;
 
 		return true;
@@ -280,27 +420,28 @@ class Piece {
 }
 
 
-class Lightris extends hxd.App {
+class Board {
 
-	var gridCont : SceneObject;
+	public var gridCont : SceneObject;
 	var gridGraphics : h2d.Graphics;
 	var boardObj : SceneObject;
 	var tf : h2d.Text;
+	var fullUi : BoardUI;
 
 	// 0, 0 is bottom LEFT
 	var board: Array<Array<Block>> = [];
 	var current: Piece = null;
-	// public static final BOARD_WIDTH = 10;
-	// public static final BOARD_HEIGHT = 20;
-	// public static final BOARD_TOP_EXTRA = 3;
-	// public static final BOARD_FULL_HEIGHT = BOARD_HEIGHT + BOARD_TOP_EXTRA;
+	var hold: Piece = null;
+	var nextQueue: Array<Piece> = [];
 
 	var seed = Std.random(0x7FFFFFFF);
 	public static var rnd: hxd.Rand;
 	var bag: RandomProvider;
 	public static var style : h2d.domkit.Style;
 
-	override function init() {
+	public function new() {}
+
+	public function init(s2d: h2d.Scene) {
 		var cdbData = hxd.Res.data.entry.getText();
 		Data.load(cdbData, false);
 		hxd.Res.data.watch(function() {
@@ -308,11 +449,13 @@ class Lightris extends hxd.App {
 			Data.load(cdbData, true);
 		});
 
+		fullUi = new BoardUI(s2d);
+
 		trace("Seed: " + seed);
 		rnd = new hxd.Rand(seed);
 		bag = new RandomProvider(rnd, Bag);
 		// creates a new object and put it at the center of the sceen
-		gridCont = new SceneObject(s2d);
+		gridCont = new SceneObject(fullUi.boardCont);
 
 		style = new h2d.domkit.Style();
 		style.allowInspect = #if debug true #else false #end;
@@ -326,7 +469,6 @@ class Lightris extends hxd.App {
 		boardObj.dom.addClass("board");
 		boardObj.y = Const.BOARD_FULL_HEIGHT * Const.SIDE;
 		clearBoard();
-		onResize();
 	}
 
 	function drawGrid(g: h2d.Graphics) {
@@ -351,10 +493,27 @@ class Lightris extends hxd.App {
 		g.lineStyle();
 	}
 
-	function nextMino() {
-		if (current != null)
+	function blockIsEmpty(x, y) {
+		return board[x][y] == null || board[x][y].isEmpty;
+	}
+
+	function fillNext() {
+		for (_ in nextQueue.length...Const.NEXT_QUEUE_SIZE) {
+			nextQueue.push(new Piece(bag.getNext()));
+		}
+		for (i in 0...Const.NEXT_QUEUE_SIZE) {
+			fullUi.nextPieces[i].removeChildren();
+			fullUi.nextPieces[i].addChild(nextQueue[i].obj);
+			nextQueue[i].updatePos(true);
+		}
+	}
+	function nextMino(?remove = true) {
+		if (current != null && remove)
 			current.obj.remove();
-		current = new Piece(bag.getNext(), boardObj);
+		current = nextQueue.shift();
+		boardObj.addChild(current.obj);
+		current.reset();
+		fillNext();
 	}
 	function collides(m: Piece, offsetx = 0, offsety = 0) {
 		for (b in m.blocks) {
@@ -362,7 +521,7 @@ class Lightris extends hxd.App {
 			var y = b.y + m.y + offsety;
 			if (x < 0 || x >= board.length || y < 0)
 				return true;
-			if (board[x][y] != null)
+			if (!blockIsEmpty(x, y))
 				return true;
 		}
 		return false;
@@ -371,6 +530,9 @@ class Lightris extends hxd.App {
 		for (b in m.blocks) {
 			var x = b.x + m.x;
 			var y = b.y + m.y;
+			if (board[x][y] != null) {
+				board[x][y].obj.remove();
+			}
 			board[x][y] = b;
 			boardObj.addChild(b.obj);
 			b.x = x;
@@ -414,6 +576,26 @@ class Lightris extends hxd.App {
 		else
 			current.loadPos(initial);
 	}
+
+	function swapHold() {
+		if (hold == null) {
+			hold = current;
+			nextMino(false);
+		} else {
+			var a = hold;
+			hold = current;
+			current = a;
+			current.reset();
+			boardObj.addChild(current.obj);
+		}
+		hold.rotation = 0;
+		hold.x = 0;
+		hold.y = 0;
+		hold.updatePos(true);
+		fullUi.currHold.addChild(hold.obj);
+	}
+
+
 	function clearBoard() {
 		for (i in 0...board.length) {
 			for (j in 0...board[i].length) {
@@ -424,15 +606,26 @@ class Lightris extends hxd.App {
 		if (current != null)
 			current.obj.remove();
 
-		board = [for (i in 0...Const.BOARD_WIDTH) [for (j in 0...Const.BOARD_FULL_HEIGHT) null]];
+		board = [for (i in 0...Const.BOARD_WIDTH) [
+			for (j in 0...Const.BOARD_FULL_HEIGHT) {
+				if (j >= Const.BOARD_HEIGHT) null
+				else new Block(i, j, Data.mino.get(Background), boardObj);
+			}
+		]];
+		fillNext();
 		nextMino();
+		if (hold != null)
+			hold.obj.remove();
+		hold = null;
 
-		var source = new Block(4, 0, Data.mino.get(Source), boardObj);
+		var source = new Block(4, 0, Data.mino.get(SourceL), boardObj);
 		source.roads = [true, true, false, true];
+		board[4][0].obj.remove();
 		board[4][0] = source;
 		source.updatePos();
-		source = new Block(5, 0, Data.mino.get(Source), boardObj);
+		source = new Block(5, 0, Data.mino.get(SourceR), boardObj);
 		source.roads = [true, true, false, true];
+		board[5][0].obj.remove();
 		board[5][0] = source;
 		source.updatePos();
 	}
@@ -449,9 +642,9 @@ class Lightris extends hxd.App {
 				case Down:	j--;
 				case Left:	i--;
 			}
-			if (i < 0 || i > Const.BOARD_WIDTH || j < 0 || j > Const.BOARD_HEIGHT)
+			if (i < 0 || i >= Const.BOARD_WIDTH || j < 0 || j >= Const.BOARD_FULL_HEIGHT)
 				continue;
-			if (board[i][j] == null)
+			if (blockIsEmpty(i, j))
 				continue;
 			if (!b.hasDir(r) || board[i][j].on || !board[i][j].hasDir(r.rotateBy(2)))
 				continue;
@@ -463,7 +656,7 @@ class Lightris extends hxd.App {
 		var starts = [];
 		for (i in 0...board.length) {
 			for (j in 0...board[i].length) {
-				if (board[i][j] != null) {
+				if (!blockIsEmpty(i, j)) {
 					if (board[i][j].alwaysOn())
 						starts.push(board[i][j]);
 					else
@@ -538,9 +731,7 @@ class Lightris extends hxd.App {
 			current.updatePos();
 		}
 	}
-	override function update(dt:Float) {
-		if (current == null)
-			nextMino();
+	public function update(dt:Float) {
 		if (K.isPressed(K.R)) {
 			clearBoard();
 		}
@@ -553,17 +744,16 @@ class Lightris extends hxd.App {
 		if (K.isPressed(K.DOWN)) {
 			rotate(true);
 		}
+		if (K.isPressed(K.UP)) {
+			swapHold();
+		}
 		updateSoftDrop(dt);
 		updateMove(dt);
-	}
 
-	override function onResize() {
-		trace("resize", s2d.width, s2d.height);
-		gridCont.x = Std.int(s2d.width / 2) - ((Const.BOARD_WIDTH / 2) * Const.SIDE);
+		#if debug
+		if (K.isPressed(K.M)) {
+			current.areRoadsValid();
+		}
+		#end
 	}
-	static function main() {
-		hxd.Res.initEmbed();
-		new Lightris();
-	}
-
 }

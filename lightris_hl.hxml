@@ -8,7 +8,7 @@
 -D debug
 
 -hl lightris.hl
--main Lightris
+-main Main
 -cp ../..
 -cp .
 
