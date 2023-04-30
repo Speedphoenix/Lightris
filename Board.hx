@@ -6,14 +6,16 @@ using Main;
 
 // TODO TOMORROW
 // Menu principal + credits
+// 		How to play
+// 		Make all the texts images
 // defeat condition
 // gravity
 // auto lock
-// better generated pieces?
 // garbage
 // scroll
 // next target when grab
 // final goal
+// better generated pieces?
 // le camion
 // fog
 // fix that L rotation on the rotation table
@@ -21,6 +23,7 @@ using Main;
 // for better generated pieces:
 // generate all possibles during startup
 // assign weight on number of exits and road types (4-roads should be rarer)
+// low exits and high exits should be rare
 
 enum RandomMode {
 	FullRandom;
@@ -46,6 +49,7 @@ class BoardUI extends h2d.Flow implements h2d.domkit.Object {
     static var SRC = <board-ui
 		fill-width={true}
 		content-halign={h2d.Flow.FlowAlign.Middle}
+		content-valign={h2d.Flow.FlowAlign.Top}
 		spacing={{x: 10, y: 0}}
 	>
 		<flow class="left-cont"
@@ -572,11 +576,10 @@ class Board {
 	var seed = Std.random(0x7FFFFFFF);
 	public static var rnd: hxd.Rand;
 	var bag: RandomProvider;
-	public static var style : h2d.domkit.Style;
 
 	public function new() {}
 
-	public function init(s2d: h2d.Scene) {
+	public function init(root: h2d.Object) {
 		var cdbData = hxd.Res.data.entry.getText();
 		Data.load(cdbData, false);
 		hxd.Res.data.watch(function() {
@@ -584,19 +587,13 @@ class Board {
 			Data.load(cdbData, true);
 		});
 
-		fullUi = new BoardUI(s2d);
+		fullUi = new BoardUI(root);
 
 		trace("Seed: " + seed);
 		rnd = new hxd.Rand(seed);
 		bag = new RandomProvider(rnd, Bag);
 		// creates a new object and put it at the center of the sceen
 		gridCont = new SceneObject(fullUi.boardCont);
-
-		style = new h2d.domkit.Style();
-		style.allowInspect = #if debug true #else false #end;
-		style.addObject(gridCont);
-		gridCont.dom.addClass("root");
-		// gridCont.dom = domkit.Properties.create("object", gridCont, {"class": "root"});
 
 		gridGraphics = new h2d.Graphics(gridCont);
 		drawGrid(gridGraphics);
