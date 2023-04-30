@@ -1,6 +1,7 @@
 
 import hxd.Key as K;
 using Extensions;
+using Const;
 
 // TODO TOMORROW
 // force piece to have at least two blocks connected
@@ -20,21 +21,6 @@ class SceneBitmap extends h2d.Bitmap implements h2d.domkit.Object {
 	}
 }
 
-enum abstract Direction(Int) from Int to Int{
-	var Up = 0;
-	var Right = 1;
-	var Down = 2;
-	var Left = 3;
-
-	public inline function rotateBy(i: Int): Direction {
-		var a = this + i;
-		if (a < 0)
-			a += 4;
-		a %= 4;
-		return a;
-	}
-}
-
 enum RandomMode {
 	FullRandom;
 	Bag;
@@ -43,7 +29,7 @@ enum RandomMode {
 class RandomProvider {
 	var rnd: hxd.Rand;
 	var mode: RandomMode;
-	var max = Lightris.MINO_COUNT;
+	var max = Const.MINO_COUNT;
 	var all: Array<Int>;
 	var currBag: Array<Int> = [];
 
@@ -70,7 +56,7 @@ class RandomProvider {
 }
 
 class Block {
-	static public final SIDE = 40;
+	// static public final SIDE = 40;
 
 	public var x: Int;
 	public var y: Int;
@@ -90,12 +76,6 @@ class Block {
 		roadBmp = new SceneBitmap(null, obj);
 		this.on = alwaysOn();
 
-		inline function randBool() {
-			return Lightris.rnd.random(2) == 0;
-		}
-		roads = [randBool(), randBool(), randBool(), randBool()];
-		while (roads.count(r -> r) == 1)
-			roads = [randBool(), randBool(), randBool(), randBool()];
 		obj.dom.addClass("block");
 		this.x = x;
 		this.y = y;
@@ -103,8 +83,8 @@ class Block {
 	}
 
 	public function updatePos() {
-		obj.x = x * Block.SIDE;
-		obj.y = (y + 1) * Block.SIDE * -1;
+		obj.x = x * Const.SIDE;
+		obj.y = (y + 1) * Const.SIDE * -1;
 
 		var roadInf = Data.road.all.find(function(r) {
 			for (i in 0...roads.length) {
@@ -141,8 +121,19 @@ class Piece {
 		inf = Data.mino.all[i];
 		obj.dom.addClass(inf.id.toString().toLowerCase());
 		blocks = [for (b in inf.blocks) new Block(b.x, b.y, inf, obj)];
+		var stamp = haxe.Timer.stamp();
+		shuffleRoads();
+		var tries = 0;
+		while (!areRoadsValid()) {
+			tries++;
+			shuffleRoads();
+			if (tries > 1000)
+				break;
+		}
+		var elapsed = haxe.Timer.stamp() - stamp;
+		trace('Block ${inf.id} took $tries tries to find ($elapsed s). Valid: ${areRoadsValid()}');
 		x = 4;
-		y = Lightris.BOARD_HEIGHT - 1;
+		y = Const.BOARD_HEIGHT - 1;
 		updatePos();
 	}
 
@@ -166,8 +157,8 @@ class Piece {
 
 	var pivotG = null;
 	public function updatePos() {
-		obj.x = x * Block.SIDE;
-		obj.y = y * Block.SIDE * -1;
+		obj.x = x * Const.SIDE;
+		obj.y = y * Const.SIDE * -1;
 		for (b in blocks)
 			b.updatePos();
 		#if debug
@@ -177,7 +168,7 @@ class Piece {
 		var py = inf.pivot.y;
 		pivotG.clear();
 		pivotG.lineStyle(2, 0x00FF40);
-		pivotG.drawCircle(Block.SIDE * (px + 0.5), Block.SIDE * (-py - 0.5), 10);
+		pivotG.drawCircle(Const.SIDE * (px + 0.5), Const.SIDE * (-py - 0.5), 10);
 		#end
 	}
 
@@ -205,6 +196,87 @@ class Piece {
 			b.rotation = rotation;
 		}
 	}
+
+	function shuffleRoads() {
+		inline function randBool() {
+			return Lightris.rnd.random(2) == 0;
+		}
+		for (b in blocks) {
+			for (i in 0...4) {
+				b.roads[i] = randBool();
+			}
+		}
+	}
+
+	function checkRec(curr: Block, toCheck: Array<Block>, exits: Array<Array<Bool>>) {
+		toCheck.remove(curr);
+		var currIdx = blocks.indexOf(curr);
+		for (k in 0...4) {
+			var r: Direction = k;
+			if (!curr.hasDir(r))
+				continue;
+			var i = curr.x;
+			var j = curr.y;
+			switch (r) {
+				case Up: 	j++;
+				case Right:	i++;
+				case Down:	j--;
+				case Left:	i--;
+			}
+			var to = blocks.find(b -> b.x == i && b.y == j);
+			if (to == null) {
+				exits[currIdx][k] = true;
+			} else {
+				// unterminated road inside
+				if (!to.hasDir(r.rotateBy(2)))
+					return false;
+				if (toCheck.has(to)) {
+					var check = checkRec(to, toCheck, exits);
+					if (!check)
+						return false;
+				}
+			}
+		}
+		return true;
+	}
+	public function areRoadsValid() {
+		var roadedBlocks = blocks.filter(b -> b.roads.count(r -> r) > 0);
+		if (roadedBlocks.length < Const.MIN_ROADED_PER_PIECE)
+			return false;
+		if (roadedBlocks.any(b -> b.roads.count(r -> r) == 1))
+			return false;
+		var toCheck = roadedBlocks.copy();
+		var exits = [for (i in 0...blocks.length) [for (i in 0...4) false]];
+		var check = checkRec(toCheck[0], toCheck, exits);
+		if (!check)
+			return false;
+		if (toCheck.length > 0) // unconnected block inside
+			return false;
+		var found = 0;
+		for (i in 0...exits.length) {
+			for (j in 0...exits[i].length) {
+				if (exits[i][j]) {
+
+					for (i2 in (i + 1)...exits.length) {
+						for (j2 in 0...exits[i2].length) {
+							if (j2 == j)
+								continue;
+							if (exits[i2][j2])
+								found++;
+							if (found > Const.MIN_SEPARATE_EXITS) break;
+						}
+						if (found > Const.MIN_SEPARATE_EXITS) break;
+					}
+				}
+				if (found > Const.MIN_SEPARATE_EXITS) break;
+			}
+			if (found > Const.MIN_SEPARATE_EXITS) break;
+		}
+		if (found < Const.MIN_SEPARATE_EXITS)
+			return false;
+
+		return true;
+	}
 }
 
 
@@ -218,11 +290,10 @@ class Lightris extends hxd.App {
 	// 0, 0 is bottom LEFT
 	var board: Array<Array<Block>> = [];
 	var current: Piece = null;
-	public static final BOARD_WIDTH = 10;
-	public static final BOARD_HEIGHT = 20;
-	public static final BOARD_TOP_EXTRA = 3;
-	public static final BOARD_FULL_HEIGHT = BOARD_HEIGHT + BOARD_TOP_EXTRA;
-	public static final MINO_COUNT = 7;
+	// public static final BOARD_WIDTH = 10;
+	// public static final BOARD_HEIGHT = 20;
+	// public static final BOARD_TOP_EXTRA = 3;
+	// public static final BOARD_FULL_HEIGHT = BOARD_HEIGHT + BOARD_TOP_EXTRA;
 
 	var seed = Std.random(0x7FFFFFFF);
 	public static var rnd: hxd.Rand;
@@ -253,7 +324,7 @@ class Lightris extends hxd.App {
 		drawGrid(gridGraphics);
 		boardObj = new SceneObject(gridCont);
 		boardObj.dom.addClass("board");
-		boardObj.y = BOARD_FULL_HEIGHT * Block.SIDE;
+		boardObj.y = Const.BOARD_FULL_HEIGHT * Const.SIDE;
 		clearBoard();
 		onResize();
 	}
@@ -262,20 +333,20 @@ class Lightris extends hxd.App {
 		g.clear();
 
 		g.lineStyle(2, 0xF8DCC1);
-		g.moveTo(0, BOARD_TOP_EXTRA * Block.SIDE);
-		g.lineTo(0, (BOARD_HEIGHT + BOARD_TOP_EXTRA) * Block.SIDE);
-		g.lineTo(BOARD_WIDTH * Block.SIDE, (BOARD_HEIGHT + BOARD_TOP_EXTRA) * Block.SIDE);
-		g.lineTo(BOARD_WIDTH * Block.SIDE, BOARD_TOP_EXTRA * Block.SIDE);
-		g.lineTo(0, BOARD_TOP_EXTRA * Block.SIDE);
+		g.moveTo(0, Const.BOARD_TOP_EXTRA * Const.SIDE);
+		g.lineTo(0, (Const.BOARD_HEIGHT + Const.BOARD_TOP_EXTRA) * Const.SIDE);
+		g.lineTo(Const.BOARD_WIDTH * Const.SIDE, (Const.BOARD_HEIGHT + Const.BOARD_TOP_EXTRA) * Const.SIDE);
+		g.lineTo(Const.BOARD_WIDTH * Const.SIDE, Const.BOARD_TOP_EXTRA * Const.SIDE);
+		g.lineTo(0, Const.BOARD_TOP_EXTRA * Const.SIDE);
 
 		g.lineStyle(1, 0xF8DCC1);
-		for (i in 1...BOARD_WIDTH) {
-			g.moveTo(i * Block.SIDE, BOARD_TOP_EXTRA * Block.SIDE);
-			g.lineTo(i * Block.SIDE, BOARD_FULL_HEIGHT * Block.SIDE);
+		for (i in 1...Const.BOARD_WIDTH) {
+			g.moveTo(i * Const.SIDE, Const.BOARD_TOP_EXTRA * Const.SIDE);
+			g.lineTo(i * Const.SIDE, Const.BOARD_FULL_HEIGHT * Const.SIDE);
 		}
-		for (i in 1...BOARD_HEIGHT) {
-			g.moveTo(0, (i + BOARD_TOP_EXTRA) * Block.SIDE);
-			g.lineTo(BOARD_WIDTH * Block.SIDE, (i + BOARD_TOP_EXTRA) * Block.SIDE);
+		for (i in 1...Const.BOARD_HEIGHT) {
+			g.moveTo(0, (i + Const.BOARD_TOP_EXTRA) * Const.SIDE);
+			g.lineTo(Const.BOARD_WIDTH * Const.SIDE, (i + Const.BOARD_TOP_EXTRA) * Const.SIDE);
 		}
 		g.lineStyle();
 	}
@@ -353,7 +424,7 @@ class Lightris extends hxd.App {
 		if (current != null)
 			current.obj.remove();
 
-		board = [for (i in 0...BOARD_WIDTH) [for (j in 0...BOARD_FULL_HEIGHT) null]];
+		board = [for (i in 0...Const.BOARD_WIDTH) [for (j in 0...Const.BOARD_FULL_HEIGHT) null]];
 		nextMino();
 
 		var source = new Block(4, 0, Data.mino.get(Source), boardObj);
@@ -378,7 +449,7 @@ class Lightris extends hxd.App {
 				case Down:	j--;
 				case Left:	i--;
 			}
-			if (i < 0 || i > BOARD_WIDTH || j < 0 || j > BOARD_HEIGHT)
+			if (i < 0 || i > Const.BOARD_WIDTH || j < 0 || j > Const.BOARD_HEIGHT)
 				continue;
 			if (board[i][j] == null)
 				continue;
@@ -488,7 +559,7 @@ class Lightris extends hxd.App {
 
 	override function onResize() {
 		trace("resize", s2d.width, s2d.height);
-		gridCont.x = Std.int(s2d.width / 2) - ((BOARD_WIDTH / 2) * Block.SIDE);
+		gridCont.x = Std.int(s2d.width / 2) - ((Const.BOARD_WIDTH / 2) * Const.SIDE);
 	}
 	static function main() {
 		hxd.Res.initEmbed();
