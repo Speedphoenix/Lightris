@@ -42,7 +42,7 @@ typedef InputConfig = {
     static final MINO_COUNT = 7;
 	static final NEXT_QUEUE_SIZE = 5;
 	static final FIRST_TARGET_LINE = 12;
-	static final TARGET_LINE_SPACING = 9;
+	static final TARGET_LINE_SPACING = 7;
 	static final TARGET_COL_MIN = 1;
 	static final TARGET_COL_MAX = 3;
 

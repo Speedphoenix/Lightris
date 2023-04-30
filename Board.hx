@@ -13,7 +13,6 @@ using Main;
 // auto lock
 // garbage
 // scroll
-// next target when grab
 // final goal
 // better generated pieces?
 // le camion
@@ -903,6 +902,7 @@ class Board {
 				targets.remove(t);
 				t.inf = Data.mino.get(TargetObtained);
 				animals.push(Data.animal.all[rnd.random(Data.animal.all.length)]);
+				spawnTarget();
 			}
 		}
 		fullUi.setScore(animals.length);
