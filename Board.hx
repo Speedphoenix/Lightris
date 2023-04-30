@@ -9,7 +9,7 @@ using Main;
 // defeat condition
 // gravity
 // auto lock
-// designed pieces
+// better generated pieces?
 // garbage
 // scroll
 // next target when grab
@@ -17,6 +17,10 @@ using Main;
 // le camion
 // fog
 // fix that L rotation on the rotation table
+
+// for better generated pieces:
+// generate all possibles during startup
+// assign weight on number of exits and road types (4-roads should be rarer)
 
 enum RandomMode {
 	FullRandom;
@@ -295,22 +299,31 @@ class Piece {
 		} else {
 			inf = Data.mino.all[i];
 			blocks = [for (b in inf.blocks) new Block(b.x, b.y, inf, obj)];
-			var stamp = haxe.Timer.stamp();
-			shuffleRoads();
-			var tries = 0;
-			while (!areRoadsValid()) {
-				tries++;
-				shuffleRoads();
-				if (tries > 2000) {
-					iterateRec(0, 0, areRoadsValid);
-					break;
+			if (Const.USE_DEFAULT_ROADS) {
+				for (i in 0...inf.blocks.length) {
+					var rds = inf.blocks[i].defaultRoads.match;
+					for (j in 0...4) {
+						blocks[i].roads[j] = rds[j].v;
+					}
 				}
+			} else {
+				var stamp = haxe.Timer.stamp();
+				shuffleRoads();
+				var tries = 0;
+				while (!areRoadsValid()) {
+					tries++;
+					shuffleRoads();
+					if (tries > 2000) {
+						iterateRec(0, 0, areRoadsValid);
+						break;
+					}
+				}
+				var elapsed = haxe.Timer.stamp() - stamp;
+				var elapsedStr = fToString(elapsed);
+				if (tries > 2000)
+					trace("TOOK ALL TRIES, FALLBACK");
+				trace('Block ${inf.id} took $tries tries to find ($elapsedStr, $elapsed s). Valid: ${areRoadsValid()}');
 			}
-			var elapsed = haxe.Timer.stamp() - stamp;
-			var elapsedStr = fToString(elapsed);
-			if (tries > 2000)
-				trace("TOOK ALL TRIES, FALLBACK");
-			trace('Block ${inf.id} took $tries tries to find ($elapsedStr, $elapsed s). Valid: ${areRoadsValid()}');
 		}
 		obj.dom.addClass(inf.id.toString().toLowerCase());
 

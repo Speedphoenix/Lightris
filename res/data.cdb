@@ -288,7 +288,7 @@
 						{
 							"x": -1,
 							"y": 0,
-							"defaultRoads": "CornerUpRight"
+							"defaultRoads": "TRight"
 						},
 						{
 							"x": 0,
@@ -303,7 +303,7 @@
 						{
 							"x": 1,
 							"y": 1,
-							"defaultRoads": "CornerDownLeft"
+							"defaultRoads": "TLeft"
 						}
 					],
 					"pivot": {
@@ -335,7 +335,7 @@
 						{
 							"x": -1,
 							"y": 1,
-							"defaultRoads": "CornerDownRight"
+							"defaultRoads": "TRight"
 						},
 						{
 							"x": 0,
@@ -350,7 +350,7 @@
 						{
 							"x": 1,
 							"y": 0,
-							"defaultRoads": "CornerUpLeft"
+							"defaultRoads": "TLeft"
 						}
 					],
 					"pivot": {
