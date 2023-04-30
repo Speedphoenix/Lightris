@@ -9,6 +9,12 @@
 					"kind": null
 				},
 				{
+					"typeStr": "14",
+					"name": "phantom",
+					"opt": true,
+					"kind": null
+				},
+				{
 					"typeStr": "0",
 					"name": "id",
 					"kind": null,
@@ -29,7 +35,7 @@
 					"kind": null
 				},
 				{
-					"typeStr": "10:AlwaysOn,Empty",
+					"typeStr": "10:AlwaysOn,Empty,HideRoads,AllRoads",
 					"name": "flags"
 				},
 				{
@@ -50,19 +56,23 @@
 					"blocks": [
 						{
 							"x": 0,
-							"y": 0
+							"y": 0,
+							"defaultRoads": "LineVertical"
 						},
 						{
 							"x": 0,
-							"y": 1
+							"y": 1,
+							"defaultRoads": "LineVertical"
 						},
 						{
 							"x": 1,
-							"y": 1
+							"y": 1,
+							"defaultRoads": "LineVertical"
 						},
 						{
 							"x": 1,
-							"y": 0
+							"y": 0,
+							"defaultRoads": "LineVertical"
 						}
 					],
 					"pivot": {
@@ -71,7 +81,14 @@
 					},
 					"rotation": "None",
 					"flags": 0,
-					"props": {}
+					"props": {},
+					"group": 0,
+					"phantom": {
+						"file": "SpriteSheetBloc.png",
+						"size": 32,
+						"x": 5,
+						"y": 1
+					}
 				},
 				{
 					"id": "I",
@@ -84,19 +101,23 @@
 					"blocks": [
 						{
 							"x": -1,
-							"y": 0
+							"y": 0,
+							"defaultRoads": "TRight"
 						},
 						{
 							"x": 0,
-							"y": 0
+							"y": 0,
+							"defaultRoads": "LineHorizontal"
 						},
 						{
 							"x": 1,
-							"y": 0
+							"y": 0,
+							"defaultRoads": "LineHorizontal"
 						},
 						{
 							"x": 2,
-							"y": 0
+							"y": 0,
+							"defaultRoads": "TLeft"
 						}
 					],
 					"pivot": {
@@ -105,7 +126,14 @@
 					},
 					"rotation": "I",
 					"flags": 0,
-					"props": {}
+					"props": {},
+					"group": 0,
+					"phantom": {
+						"file": "SpriteSheetBloc.png",
+						"size": 32,
+						"x": 4,
+						"y": 1
+					}
 				},
 				{
 					"id": "T",
@@ -118,19 +146,23 @@
 					"blocks": [
 						{
 							"x": 0,
-							"y": 1
+							"y": 1,
+							"defaultRoads": "LineVertical"
 						},
 						{
 							"x": -1,
-							"y": 0
+							"y": 0,
+							"defaultRoads": "LineHorizontal"
 						},
 						{
 							"x": 0,
-							"y": 0
+							"y": 0,
+							"defaultRoads": "TUp"
 						},
 						{
 							"x": 1,
-							"y": 0
+							"y": 0,
+							"defaultRoads": "LineHorizontal"
 						}
 					],
 					"pivot": {
@@ -141,6 +173,13 @@
 					"flags": 0,
 					"props": {
 						"sideOffset": 0.5
+					},
+					"group": 0,
+					"phantom": {
+						"file": "SpriteSheetBloc.png",
+						"size": 32,
+						"x": 2,
+						"y": 1
 					}
 				},
 				{
@@ -154,19 +193,23 @@
 					"blocks": [
 						{
 							"x": -1,
-							"y": 0
+							"y": 0,
+							"defaultRoads": "TRight"
 						},
 						{
 							"x": 0,
-							"y": 0
+							"y": 0,
+							"defaultRoads": "LineHorizontal"
 						},
 						{
 							"x": 1,
-							"y": 0
+							"y": 0,
+							"defaultRoads": "CornerUpLeft"
 						},
 						{
 							"x": 1,
-							"y": 1
+							"y": 1,
+							"defaultRoads": "LineVertical"
 						}
 					],
 					"pivot": {
@@ -177,6 +220,13 @@
 					"flags": 0,
 					"props": {
 						"sideOffset": 0.5
+					},
+					"group": 0,
+					"phantom": {
+						"file": "SpriteSheetBloc.png",
+						"size": 32,
+						"x": 1,
+						"y": 1
 					}
 				},
 				{
@@ -190,19 +240,23 @@
 					"blocks": [
 						{
 							"x": -1,
-							"y": 1
+							"y": 1,
+							"defaultRoads": "LineVertical"
 						},
 						{
 							"x": -1,
-							"y": 0
+							"y": 0,
+							"defaultRoads": "CornerUpRight"
 						},
 						{
 							"x": 0,
-							"y": 0
+							"y": 0,
+							"defaultRoads": "LineHorizontal"
 						},
 						{
 							"x": 1,
-							"y": 0
+							"y": 0,
+							"defaultRoads": "TLeft"
 						}
 					],
 					"pivot": {
@@ -213,6 +267,13 @@
 					"flags": 0,
 					"props": {
 						"sideOffset": 0.5
+					},
+					"group": 0,
+					"phantom": {
+						"file": "SpriteSheetBloc.png",
+						"size": 32,
+						"x": 3,
+						"y": 1
 					}
 				},
 				{
@@ -226,19 +287,23 @@
 					"blocks": [
 						{
 							"x": -1,
-							"y": 0
+							"y": 0,
+							"defaultRoads": "CornerUpRight"
 						},
 						{
 							"x": 0,
-							"y": 0
+							"y": 0,
+							"defaultRoads": "CornerUpLeft"
 						},
 						{
 							"x": 0,
-							"y": 1
+							"y": 1,
+							"defaultRoads": "CornerDownRight"
 						},
 						{
 							"x": 1,
-							"y": 1
+							"y": 1,
+							"defaultRoads": "CornerDownLeft"
 						}
 					],
 					"pivot": {
@@ -249,6 +314,13 @@
 					"flags": 0,
 					"props": {
 						"sideOffset": 0.5
+					},
+					"group": 0,
+					"phantom": {
+						"file": "SpriteSheetBloc.png",
+						"size": 32,
+						"x": 7,
+						"y": 1
 					}
 				},
 				{
@@ -262,19 +334,23 @@
 					"blocks": [
 						{
 							"x": -1,
-							"y": 1
+							"y": 1,
+							"defaultRoads": "CornerDownRight"
 						},
 						{
 							"x": 0,
-							"y": 1
+							"y": 1,
+							"defaultRoads": "CornerDownLeft"
 						},
 						{
 							"x": 0,
-							"y": 0
+							"y": 0,
+							"defaultRoads": "CornerUpRight"
 						},
 						{
 							"x": 1,
-							"y": 0
+							"y": 0,
+							"defaultRoads": "CornerUpLeft"
 						}
 					],
 					"pivot": {
@@ -285,6 +361,13 @@
 					"flags": 0,
 					"props": {
 						"sideOffset": 0.5
+					},
+					"group": 0,
+					"phantom": {
+						"file": "SpriteSheetBloc.png",
+						"size": 32,
+						"x": 6,
+						"y": 1
 					}
 				},
 				{
@@ -296,13 +379,14 @@
 					},
 					"rotation": "None",
 					"gfx": {
-						"file": "square.png",
+						"file": "Starting.png",
 						"size": 32,
-						"x": 9,
+						"x": 0,
 						"y": 0
 					},
-					"flags": 1,
-					"props": {}
+					"flags": 13,
+					"props": {},
+					"group": 1
 				},
 				{
 					"id": "SourceR",
@@ -312,12 +396,103 @@
 						"y": 0
 					},
 					"rotation": "None",
-					"flags": 1,
+					"flags": 13,
 					"props": {},
 					"gfx": {
-						"file": "square.png",
+						"file": "Starting.png",
 						"size": 32,
-						"x": 9,
+						"x": 1,
+						"y": 0
+					},
+					"group": 1
+				},
+				{
+					"id": "EndL",
+					"blocks": [],
+					"pivot": {
+						"x": 0,
+						"y": 0
+					},
+					"rotation": "None",
+					"flags": 12,
+					"props": {},
+					"group": 1,
+					"gfx": {
+						"file": "EndUnlit.png",
+						"size": 32,
+						"x": 0,
+						"y": 0
+					}
+				},
+				{
+					"id": "EndR",
+					"blocks": [],
+					"pivot": {
+						"x": 0,
+						"y": 0
+					},
+					"rotation": "None",
+					"flags": 12,
+					"props": {},
+					"gfx": {
+						"file": "EndUnlit.png",
+						"size": 32,
+						"x": 1,
+						"y": 0
+					},
+					"group": 1
+				},
+				{
+					"id": "EndLLit",
+					"blocks": [],
+					"pivot": {
+						"x": 0,
+						"y": 0
+					},
+					"rotation": "None",
+					"flags": 12,
+					"props": {},
+					"gfx": {
+						"file": "EndLit.png",
+						"size": 32,
+						"x": 0,
+						"y": 0
+					},
+					"group": 1
+				},
+				{
+					"id": "EndRLit",
+					"blocks": [],
+					"pivot": {
+						"x": 0,
+						"y": 0
+					},
+					"rotation": "None",
+					"flags": 12,
+					"props": {},
+					"gfx": {
+						"file": "EndLit.png",
+						"size": 32,
+						"x": 1,
+						"y": 0
+					},
+					"group": 1
+				},
+				{
+					"id": "Garbage",
+					"blocks": [],
+					"pivot": {
+						"x": 0,
+						"y": 0
+					},
+					"rotation": "None",
+					"flags": 0,
+					"props": {},
+					"group": 1,
+					"gfx": {
+						"file": "SpriteSheetBloc.png",
+						"size": 32,
+						"x": 10,
 						"y": 0
 					}
 				},
@@ -328,7 +503,7 @@
 						"x": 0,
 						"y": 0
 					},
-					"rotation": "Main",
+					"rotation": "None",
 					"flags": 2,
 					"gfx": {
 						"file": "SpriteSheetBloc.png",
@@ -336,12 +511,95 @@
 						"x": 0,
 						"y": 0
 					},
-					"props": {}
+					"props": {},
+					"group": 1
+				},
+				{
+					"id": "Target",
+					"blocks": [],
+					"pivot": {
+						"x": 0,
+						"y": 0
+					},
+					"rotation": "None",
+					"flags": 12,
+					"props": {},
+					"group": 1,
+					"gfx": {
+						"file": "SpriteSheetBloc.png",
+						"size": 32,
+						"x": 8,
+						"y": 0
+					}
+				},
+				{
+					"id": "TargetObtained",
+					"blocks": [],
+					"pivot": {
+						"x": 0,
+						"y": 0
+					},
+					"rotation": "None",
+					"flags": 13,
+					"props": {},
+					"group": 1,
+					"gfx": {
+						"file": "SpriteSheetBloc.png",
+						"size": 32,
+						"x": 9,
+						"y": 0
+					}
+				},
+				{
+					"id": "Fog1",
+					"blocks": [],
+					"pivot": {
+						"x": 0,
+						"y": 0
+					},
+					"rotation": "Main",
+					"flags": 6,
+					"props": {},
+					"group": 1,
+					"gfx": {
+						"file": "Fog.png",
+						"size": 32,
+						"x": 0,
+						"y": 0
+					}
+				},
+				{
+					"id": "Fog2",
+					"blocks": [],
+					"pivot": {
+						"x": 0,
+						"y": 0
+					},
+					"rotation": "Main",
+					"flags": 0,
+					"props": {},
+					"gfx": {
+						"file": "Fog.png",
+						"size": 32,
+						"x": 1,
+						"y": 0
+					},
+					"group": 1
 				}
 			],
-			"separators": [],
+			"separators": [
+				{
+					"title": "Minos",
+					"id": "O"
+				},
+				{
+					"title": "Other",
+					"id": "SourceL"
+				}
+			],
 			"props": {
-				"hasIndex": true
+				"hasIndex": true,
+				"hasGroup": true
 			}
 		},
 		{
@@ -356,6 +614,12 @@
 					"typeStr": "14",
 					"name": "activeGfx",
 					"kind": null
+				},
+				{
+					"typeStr": "0",
+					"name": "id",
+					"kind": null,
+					"scope": null
 				},
 				{
 					"typeStr": "8",
@@ -394,7 +658,8 @@
 						"size": 32,
 						"x": 0,
 						"y": 1
-					}
+					},
+					"id": "Cross"
 				},
 				{
 					"match": [
@@ -426,7 +691,8 @@
 						"size": 32,
 						"x": 1,
 						"y": 1
-					}
+					},
+					"id": "TUp"
 				},
 				{
 					"match": [
@@ -458,7 +724,8 @@
 						"size": 32,
 						"x": 2,
 						"y": 1
-					}
+					},
+					"id": "TRight"
 				},
 				{
 					"match": [
@@ -490,7 +757,8 @@
 						"size": 32,
 						"x": 3,
 						"y": 1
-					}
+					},
+					"id": "TDown"
 				},
 				{
 					"match": [
@@ -522,7 +790,8 @@
 						"size": 32,
 						"x": 4,
 						"y": 1
-					}
+					},
+					"id": "TLeft"
 				},
 				{
 					"match": [
@@ -554,7 +823,8 @@
 						"size": 32,
 						"x": 7,
 						"y": 1
-					}
+					},
+					"id": "CornerUpLeft"
 				},
 				{
 					"match": [
@@ -586,7 +856,8 @@
 						"size": 32,
 						"x": 8,
 						"y": 1
-					}
+					},
+					"id": "CornerUpRight"
 				},
 				{
 					"match": [
@@ -618,7 +889,8 @@
 						"size": 32,
 						"x": 6,
 						"y": 1
-					}
+					},
+					"id": "CornerDownLeft"
 				},
 				{
 					"match": [
@@ -650,7 +922,8 @@
 						"size": 32,
 						"x": 5,
 						"y": 1
-					}
+					},
+					"id": "CornerDownRight"
 				},
 				{
 					"match": [
@@ -682,7 +955,8 @@
 						"size": 32,
 						"x": 10,
 						"y": 1
-					}
+					},
+					"id": "LineVertical"
 				},
 				{
 					"match": [
@@ -714,7 +988,8 @@
 						"size": 32,
 						"x": 9,
 						"y": 1
-					}
+					},
+					"id": "LineHorizontal"
 				},
 				{
 					"match": [
@@ -742,11 +1017,14 @@
 						"size": 32,
 						"x": 11,
 						"y": 1
-					}
+					},
+					"id": "None"
 				}
 			],
 			"separators": [],
-			"props": {}
+			"props": {
+				"displayIcon": "activeGfx"
+			}
 		},
 		{
 			"name": "road@match",
@@ -1300,6 +1578,62 @@
 			"props": {}
 		},
 		{
+			"name": "animal",
+			"columns": [
+				{
+					"typeStr": "14",
+					"name": "gfx",
+					"kind": null
+				},
+				{
+					"typeStr": "0",
+					"name": "id",
+					"kind": null,
+					"scope": null
+				}
+			],
+			"lines": [
+				{
+					"id": "Pig",
+					"gfx": {
+						"file": "Cochon_V2.png",
+						"size": 64,
+						"x": 0,
+						"y": 0
+					}
+				},
+				{
+					"id": "Sheep",
+					"gfx": {
+						"file": "Mouton_V2.png",
+						"size": 64,
+						"x": 0,
+						"y": 0
+					}
+				},
+				{
+					"id": "Hen",
+					"gfx": {
+						"file": "Poule_Pixel.png",
+						"size": 32,
+						"x": 0,
+						"y": 0
+					}
+				},
+				{
+					"id": "Cow",
+					"gfx": {
+						"file": "Vache_V2.png",
+						"size": 64,
+						"x": 0,
+						"y": 0
+					}
+				}
+			],
+			"separators": [],
+			"props": {}
+		},
+		{
 			"name": "rotation@rotate",
 			"props": {
 				"hide": true
@@ -1361,6 +1695,11 @@
 					"typeStr": "3",
 					"name": "y",
 					"kind": null
+				},
+				{
+					"typeStr": "6:road",
+					"name": "defaultRoads",
+					"kind": null
 				}
 			]
 		},
@@ -1397,6 +1736,12 @@
 				{
 					"typeStr": "4",
 					"name": "sideOffset",
+					"opt": true,
+					"kind": null
+				},
+				{
+					"typeStr": "14",
+					"name": "animal",
 					"opt": true,
 					"kind": null
 				}

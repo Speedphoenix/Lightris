@@ -5,11 +5,18 @@ using Const;
 using Main;
 
 // TODO TOMORROW
+// Menu principal + credits
 // defeat condition
-// make target/goal block or checkpoint
-// add designed pieces
 // gravity
 // auto lock
+// designed pieces
+// garbage
+// scroll
+// next target when grab
+// final goal
+// le camion
+// fog
+// fix that L rotation on the rotation table
 
 enum RandomMode {
 	FullRandom;
@@ -37,20 +44,45 @@ class BoardUI extends h2d.Flow implements h2d.domkit.Object {
 		content-halign={h2d.Flow.FlowAlign.Middle}
 		spacing={{x: 10, y: 0}}
 	>
-		<flow class="hold-cont" id
-			valign={h2d.Flow.FlowAlign.Top}
-			background={panelBG}
+		<flow class="left-cont"
 			margin-top={topMargin}
-			padding={padding}
+			fill-height={true}
 			layout={h2d.Flow.FlowLayout.Vertical}
-			content-halign={h2d.Flow.FlowAlign.Middle}
+			valign={h2d.Flow.FlowAlign.Top}
+			spacing={{x: 0, y: pad}}
+			height={boardHeight}
 		>
-			<text text={"HOLD"}/>
-			<flow id="currHold" public
-				min-width={pieceWidth}
-				min-height={pieceHeight}
-				offset-x={Const.SIDE}
-			/>
+			<flow class="hold-cont" id
+				valign={h2d.Flow.FlowAlign.Top}
+				background={panelBG}
+				padding={padding}
+				layout={h2d.Flow.FlowLayout.Vertical}
+				content-halign={h2d.Flow.FlowAlign.Middle}
+				spacing={{x: 0, y: pad}}
+			>
+				<text text={"HOLD"}/>
+				<flow id="currHold" public
+					min-width={pieceWidth}
+					min-height={pieceHeight}
+					offset-x={Const.SIDE}
+				/>
+			</flow>
+			<flow class="score-cont" id
+				valign={h2d.Flow.FlowAlign.Middle}
+				background={panelBG}
+				padding={padding}
+				layout={h2d.Flow.FlowLayout.Vertical}
+				content-halign={h2d.Flow.FlowAlign.Right}
+				spacing={{x: 0, y: 15}}
+				min-width={168}
+				min-height={140}
+			>
+				<text id="score"/>
+				<flow id="animalsCont"
+					spacing={{x: 15, y: 0}}
+					valign={h2d.Flow.FlowAlign.Bottom}
+				/>
+			</flow>
 		</flow>
 		<flow class="board-cont" id public/>
 		<flow class="next-cont" id
@@ -83,7 +115,7 @@ class BoardUI extends h2d.Flow implements h2d.domkit.Object {
 			borderB : 4,
 		};
 
-		var topMargin = Const.BOARD_TOP_EXTRA * Const.SIDE;
+		var topMargin = Const.BOARD_TOP_EXTRA * Const.SIDE - 3;
 		var pieceWidth = 4 * Const.SIDE;
 		var pieceHeight = 2 * Const.SIDE;
 		var pad = 20;
@@ -93,12 +125,27 @@ class BoardUI extends h2d.Flow implements h2d.domkit.Object {
 			bottom: pad - 1, // mod 4
 			left: pad,
 		};
+		var boardHeight = Const.BOARD_HEIGHT * Const.SIDE;
 
 		initComponent();
 		holdCont.background.tileCenter = true;
 		nextCont.background.tileCenter = true;
+		scoreCont.background.tileCenter = true;
 		holdCont.background.tileBorders = true;
 		nextCont.background.tileBorders = true;
+		scoreCont.background.tileBorders = true;
+
+		setScore(0);
+	}
+
+	public function setScore(v: Int) {
+		score.text = 'SCORE: $v';
+	}
+	public function setAnimals(arr: Array<Data.Animal>) {
+		animalsCont.removeChildren();
+		for (a in arr) {
+			new SceneBitmap(a.gfx.toTile(), animalsCont);
+		}
 	}
 }
 
@@ -132,26 +179,34 @@ class RandomProvider {
 }
 
 class Block {
-	// static public final SIDE = 40;
-
 	public var x: Int;
 	public var y: Int;
 	public var obj: SceneObject;
+	var bg: SceneBitmap;
 	var roadBmp: SceneBitmap;
-	var inf: Data.Mino;
+	public var inf(default, set): Data.Mino;
 	public var rotation: Direction = Up;
 	//					top	   right  bottom left
 	public var roads = [false, false, false, false];
 
 	public var on = false;
+	public var phantomOn = false;
+	public var isPhantom = false;
 	public var isEmpty = false;
+	public var phantomAddColor = new h3d.Vector();
 
-	public function new(x, y, inf: Data.Mino, ?parent) {
-		this.inf = inf;
+
+	public function new(x, y, inf: Data.Mino, isPhantom=false, ?parent) {
+		this.isPhantom = isPhantom;
 		obj = new SceneObject(parent);
-		var bg = new SceneBitmap(inf.gfx.toTile(), obj);
+		bg = new SceneBitmap(inf.gfx.toTile(), obj);
+		bg.dom.addClass("block-bg");
 		roadBmp = new SceneBitmap(null, obj);
+		roadBmp.colorAdd = phantomAddColor;
+		roadBmp.dom.addClass("road");
+		this.inf = inf;
 		this.on = alwaysOn();
+		this.phantomOn = alwaysOn();
 		this.isEmpty = inf.flags.has(Empty);
 
 		obj.dom.addClass("block");
@@ -160,12 +215,22 @@ class Block {
 		updatePos();
 	}
 
+	function set_inf(v) {
+		bg.tile = v.gfx.toTile();
+		if (isPhantom)
+			bg.tile = v.phantom.toTile();
+		roadBmp.tile = null;
+		if (v.flags.has(AllRoads))
+			roads = [true, true, true, true];
+		return inf = v;
+	}
+
 	public function updatePos(sides = false) {
 		var offs = (sides && inf.props.sideOffset != null) ? inf.props.sideOffset : 0.;
 		obj.x = (x + offs) * Const.SIDE;
 		obj.y = (y + 1) * Const.SIDE * -1;
 
-		var roadInf = Data.road.all.find(function(r) {
+		var roadInf = (inf.flags.has(HideRoads)) ? null : Data.road.all.find(function(r) {
 			for (i in 0...roads.length) {
 				if (r.match[i].v != hasDir(i))
 					return false;
@@ -173,8 +238,15 @@ class Block {
 			return true;
 		});
 		if (roadInf != null)
-			roadBmp.tile = on ? roadInf.activeGfx.toTile() : roadInf.gfx.toTile();
+			roadBmp.tile = (on || phantomOn) ? roadInf.activeGfx.toTile() : roadInf.gfx.toTile();
+		if (!phantomOn || on) {
+			phantomAddColor.set(0, 0, 0);
+			effectElapsed = 0;
+		}
 		roadBmp.visible = roadInf != null;
+		if (isPhantom) {
+			trace("getting a road", roadInf?.id, "at", obj.x, obj.y, roadBmp.tile == null);
+		}
 	}
 
 	public function hasDir(i: Direction) {
@@ -185,6 +257,15 @@ class Block {
 	public function alwaysOn() {
 		return inf.flags.has(AlwaysOn);
 	}
+
+	var effectElapsed = 0.;
+	public function update(dt: Float) {
+		if (phantomOn && !on) {
+			effectElapsed += dt;
+			var v = Const.ROAD_PULSE_AMOUNT * ((1 + hxd.Math.sin(effectElapsed * Const.ROAD_PULSE_FREQUENCY * 2 * hxd.Math.PI)) / 2);
+			phantomAddColor.set(v, v, v);
+		}
+	}
 }
 
 class Piece {
@@ -194,6 +275,7 @@ class Piece {
 	public var y: Int;
 	public var inf: Data.Mino;
 	public var rotation: Direction = Up;
+	public var follow: Piece = null;
 
 	function fToString(v: Float, prec=5) {
 		var p = Math.pow(10, prec);
@@ -203,35 +285,49 @@ class Piece {
 		return outStr;
 	}
 
-	public function new(i: Int, ?parent) {
+	public function new(?i: Int, ?follow: Piece, ?parent) {
 		obj = new SceneObject(parent);
-		inf = Data.mino.all[i];
+		this.follow = follow;
+		if (follow != null) {
+			inf = follow.inf;
+			obj.dom.addClass("phantom");
+			blocks = [for (b in inf.blocks) new Block(b.x, b.y, inf, true, obj)];
+		} else {
+			inf = Data.mino.all[i];
+			blocks = [for (b in inf.blocks) new Block(b.x, b.y, inf, obj)];
+			var stamp = haxe.Timer.stamp();
+			shuffleRoads();
+			var tries = 0;
+			while (!areRoadsValid()) {
+				tries++;
+				shuffleRoads();
+				if (tries > 2000) {
+					iterateRec(0, 0, areRoadsValid);
+					break;
+				}
+			}
+			var elapsed = haxe.Timer.stamp() - stamp;
+			var elapsedStr = fToString(elapsed);
+			if (tries > 2000)
+				trace("TOOK ALL TRIES, FALLBACK");
+			trace('Block ${inf.id} took $tries tries to find ($elapsedStr, $elapsed s). Valid: ${areRoadsValid()}');
+		}
 		obj.dom.addClass(inf.id.toString().toLowerCase());
-		blocks = [for (b in inf.blocks) new Block(b.x, b.y, inf, obj)];
 
 		// tryAll();
 
-		var stamp = haxe.Timer.stamp();
-		shuffleRoads();
-		var tries = 0;
-		while (!areRoadsValid()) {
-			tries++;
-			shuffleRoads();
-			if (tries > 2000) {
-				iterateRec(0, 0, areRoadsValid);
-				break;
-			}
-		}
-		var elapsed = haxe.Timer.stamp() - stamp;
-		var elapsedStr = fToString(elapsed);
-		if (tries > 2000)
-			trace("TOOK ALL TRIES, FALLBACK");
-		trace('Block ${inf.id} took $tries tries to find ($elapsedStr, $elapsed s). Valid: ${areRoadsValid()}');
 	}
 
 	public function reset() {
 		x = 4;
 		y = Const.BOARD_HEIGHT - 1;
+		rotation = 0;
+		for (i in 0...blocks.length) {
+			var b = blocks[i];
+			b.rotation = rotation;
+			b.x = inf.blocks[i].x;
+			b.y = inf.blocks[i].y;
+		}
 		updatePos();
 	}
 
@@ -255,19 +351,33 @@ class Piece {
 
 	var pivotG = null;
 	public function updatePos(sides = false) {
-		obj.x = x * Const.SIDE;
-		obj.y = y * Const.SIDE * -1;
+		if (follow != null) {
+			this.x = follow.x;
+			this.inf = follow.inf;
+			this.rotation = follow.rotation;
+			for (i in 0...blocks.length) {
+				var fromb = follow.blocks[i];
+				var tob = blocks[i];
+				tob.x = fromb.x;
+				tob.y = fromb.y;
+				tob.rotation = fromb.rotation;
+				tob.roads = fromb.roads; // TODO could break
+			}
+		} else {
+			#if debug
+			// if (pivotG == null)
+			// 	pivotG = new h2d.Graphics(obj);
+			// var px = inf.pivot.x;
+			// var py = inf.pivot.y;
+			// pivotG.clear();
+			// pivotG.lineStyle(2, 0x00FF40);
+			// pivotG.drawCircle(Const.SIDE * (px + 0.5), Const.SIDE * (-py - 0.5), 10);
+			#end
+		}
 		for (b in blocks)
 			b.updatePos(sides);
-		#if debug
-		if (pivotG == null)
-			pivotG = new h2d.Graphics(obj);
-		var px = inf.pivot.x;
-		var py = inf.pivot.y;
-		pivotG.clear();
-		pivotG.lineStyle(2, 0x00FF40);
-		pivotG.drawCircle(Const.SIDE * (px + 0.5), Const.SIDE * (-py - 0.5), 10);
-		#end
+		obj.x = x * Const.SIDE;
+		obj.y = y * Const.SIDE * -1;
 	}
 
 	public function rotate(ccw: Bool) {
@@ -417,6 +527,11 @@ class Piece {
 
 		return true;
 	}
+
+	public function update(dt: Float) {
+		for (b in blocks)
+			b.update(dt);
+	}
 }
 
 
@@ -425,14 +540,21 @@ class Board {
 	public var gridCont : SceneObject;
 	var gridGraphics : h2d.Graphics;
 	var boardObj : SceneObject;
+	var lockedObj : SceneObject;
+	var phantomCont : SceneObject;
 	var tf : h2d.Text;
 	var fullUi : BoardUI;
 
 	// 0, 0 is bottom LEFT
 	var board: Array<Array<Block>> = [];
 	var current: Piece = null;
+	var phantom: Piece = null;
 	var hold: Piece = null;
 	var nextQueue: Array<Piece> = [];
+
+	var targets: Array<Block> = [];
+	var allTargets: Array<Block> = [];
+	var animals: Array<Data.Animal> = [];
 
 	var seed = Std.random(0x7FFFFFFF);
 	public static var rnd: hxd.Rand;
@@ -468,6 +590,8 @@ class Board {
 		boardObj = new SceneObject(gridCont);
 		boardObj.dom.addClass("board");
 		boardObj.y = Const.BOARD_FULL_HEIGHT * Const.SIDE;
+		lockedObj = new SceneObject(boardObj);
+		phantomCont = new SceneObject(boardObj);
 		clearBoard();
 	}
 
@@ -514,6 +638,7 @@ class Board {
 		boardObj.addChild(current.obj);
 		current.reset();
 		fillNext();
+		updateConnections();
 	}
 	function collides(m: Piece, offsetx = 0, offsety = 0) {
 		for (b in m.blocks) {
@@ -534,14 +659,13 @@ class Board {
 				board[x][y].obj.remove();
 			}
 			board[x][y] = b;
-			boardObj.addChild(b.obj);
+			lockedObj.addChild(b.obj);
 			b.x = x;
 			b.y = y;
 			b.updatePos();
 		}
-		updateConnections();
 	}
-	function hardDrop() {
+	function getHardDropDiff() {
 		var prev = 0;
 		for (i in 1...(current.y + 1)) {
 			if (collides(current, 0, -i)) {
@@ -549,7 +673,10 @@ class Board {
 			}
 			prev = i;
 		}
-		current.y -= prev;
+		return prev;
+	}
+	function hardDrop() {
+		current.y -= getHardDropDiff();
 		lockCurrent(current);
 		nextMino();
 	}
@@ -575,6 +702,7 @@ class Board {
 			current.updatePos();
 		else
 			current.loadPos(initial);
+		updateConnections();
 	}
 
 	function swapHold() {
@@ -588,11 +716,12 @@ class Board {
 			current.reset();
 			boardObj.addChild(current.obj);
 		}
-		hold.rotation = 0;
+		hold.reset();
 		hold.x = 0;
 		hold.y = 0;
 		hold.updatePos(true);
 		fullUi.currHold.addChild(hold.obj);
+		updateConnections();
 	}
 
 
@@ -609,7 +738,7 @@ class Board {
 		board = [for (i in 0...Const.BOARD_WIDTH) [
 			for (j in 0...Const.BOARD_FULL_HEIGHT) {
 				if (j >= Const.BOARD_HEIGHT) null
-				else new Block(i, j, Data.mino.get(Background), boardObj);
+				else new Block(i, j, Data.mino.get(Background), lockedObj);
 			}
 		]];
 		fillNext();
@@ -618,20 +747,51 @@ class Board {
 			hold.obj.remove();
 		hold = null;
 
-		var source = new Block(4, 0, Data.mino.get(SourceL), boardObj);
-		source.roads = [true, true, false, true];
+		var source = new Block(4, 0, Data.mino.get(SourceL), lockedObj);
 		board[4][0].obj.remove();
 		board[4][0] = source;
-		source.updatePos();
-		source = new Block(5, 0, Data.mino.get(SourceR), boardObj);
-		source.roads = [true, true, false, true];
+		source = new Block(5, 0, Data.mino.get(SourceR), lockedObj);
 		board[5][0].obj.remove();
 		board[5][0] = source;
-		source.updatePos();
+		animals = [];
+		fullUi.setScore(animals.length);
+		fullUi.setAnimals(animals);
+
+		targets.clear();
+		allTargets.clear();
+		spawnTarget();
+		updateConnections();
 	}
 
-	function fillRec(x: Int, y: Int) {
-		var b = board[x][y];
+	function spawnTarget() {
+		var y = Const.FIRST_TARGET_LINE;
+		var side = false; // true is left, false is right
+		if (!allTargets.isEmpty()) {
+			var prev = allTargets.last();
+			y = prev.y + Const.TARGET_LINE_SPACING;
+			side = Const.BOARD_WIDTH < 5;
+		} else {
+			side = rnd.random(2) == 0;
+		}
+		var col = rnd.random(Const.TARGET_COL_MAX - Const.TARGET_COL_MIN) + Const.TARGET_COL_MIN;
+		var x = side ? col : Const.BOARD_WIDTH - col - 1;
+		var t = new Block(x, y, Data.mino.get(Target), lockedObj);
+		if (board[x][y] != null)
+			board[x][y].obj.remove();
+		board[x][y] = t;
+		targets.push(t);
+		allTargets.push(t);
+	}
+
+	function fillRec(x: Int, y: Int, forPhantom = false) {
+		function getAt(x: Int, y: Int) {
+			if (!blockIsEmpty(x, y))
+				return board[x][y];
+			if (!forPhantom)
+				return null;
+			return phantom.blocks.find(e -> e.x == x && e.y == y);
+		}
+		var b = getAt(x, y);
 		for (k in 0...4) {
 			var r: Direction = k;
 			var i = b.x;
@@ -644,12 +804,53 @@ class Board {
 			}
 			if (i < 0 || i >= Const.BOARD_WIDTH || j < 0 || j >= Const.BOARD_FULL_HEIGHT)
 				continue;
-			if (blockIsEmpty(i, j))
+			var curr = getAt(i, j);
+			if (curr == null)
 				continue;
-			if (!b.hasDir(r) || board[i][j].on || !board[i][j].hasDir(r.rotateBy(2)))
+			if (!b.hasDir(r) || curr.on || !curr.hasDir(r.rotateBy(2)) || (forPhantom && curr.phantomOn))
 				continue;
-			board[i][j].on = true;
-			fillRec(i, j);
+			if (forPhantom)
+				curr.phantomOn = true;
+			else
+				board[i][j].on = true;
+			fillRec(i, j, forPhantom);
+		}
+	}
+	function fillPhantom() {
+		var starts = [];
+		for (b in phantom.blocks) {
+			b.phantomOn = false;
+			b.x += phantom.x;
+			b.y += phantom.y;
+		}
+		for (b in phantom.blocks) {
+			for (k in 0...4) {
+				var r: Direction = k;
+				var i = b.x;
+				var j = b.y;
+				switch (r) {
+					case Up: 	j++;
+					case Right:	i++;
+					case Down:	j--;
+					case Left:	i--;
+				}
+				if (i < 0 || i >= Const.BOARD_WIDTH || j < 0 || j >= Const.BOARD_FULL_HEIGHT)
+					continue;
+				if (blockIsEmpty(i, j))
+					continue;
+				if (!b.hasDir(r) || !board[i][j].on || !board[i][j].hasDir(r.rotateBy(2)))
+					continue;
+				b.phantomOn = true;
+				starts.push(b);
+				break;
+			}
+		}
+		for (s in starts) {
+			fillRec(s.x, s.y, true);
+		}
+		for (b in phantom.blocks) {
+			b.x -= phantom.x;
+			b.y -= phantom.y;
 		}
 	}
 	function updateConnections() {
@@ -657,15 +858,29 @@ class Board {
 		for (i in 0...board.length) {
 			for (j in 0...board[i].length) {
 				if (!blockIsEmpty(i, j)) {
-					if (board[i][j].alwaysOn())
+					if (board[i][j].alwaysOn()) {
 						starts.push(board[i][j]);
-					else
+					} else {
 						board[i][j].on = false;
+						board[i][j].phantomOn = false;
+					}
 				}
 			}
 		}
 		for (s in starts)
 			fillRec(s.x, s.y);
+
+		if (phantom != null && phantom.follow != current) {
+			phantom.obj.remove();
+			phantom = new Piece(current, phantomCont);
+		}
+		if (phantom == null)
+			phantom = new Piece(current, phantomCont);
+		phantom.y = current.y - getHardDropDiff();
+		phantom.updatePos();
+		fillPhantom();
+		phantom.updatePos();
+
 		for (i in 0...board.length) {
 			for (j in 0...board[i].length) {
 				if (board[i][j] != null) {
@@ -673,34 +888,42 @@ class Board {
 				}
 			}
 		}
+		for (t in targets) {
+			if (t.on) {
+				targets.remove(t);
+				t.inf = Data.mino.get(TargetObtained);
+				animals.push(Data.animal.all[rnd.random(Data.animal.all.length)]);
+			}
+		}
+		fullUi.setScore(animals.length);
+		fullUi.setAnimals(animals);
 	}
 
 	function move(by: Int) {
 		if (!collides(current, by, 0)) {
 			current.x += by;
 			current.updatePos();
+			updateConnections();
 		}
 	}
 
 	function updateMove(dt: Float) {
-		final REPEAT_DELAY = 0.033;
-		final DAS_DELAY = 0.15;
 		static var prevDir = 0;
 		static var hasDas = false;
 		static var accum = 0.;
 		var dir = 0;
-		if (K.isDown(K.D))
+		if (K.isDown(Const.config.right))
 			dir++;
-		if (K.isDown(K.Q))
+		if (K.isDown(Const.config.left))
 			dir--;
 
-		if (K.isPressed(K.D)) {
+		if (K.isPressed(Const.config.right)) {
 			move(1);
 			hasDas = false;
 			accum = 0;
 			prevDir = 1;
 		}
-		if (K.isPressed(K.Q)) {
+		if (K.isPressed(Const.config.left)) {
 			move(-1);
 			hasDas = false;
 			accum = 0;
@@ -708,21 +931,19 @@ class Board {
 		}
 		if (dir != 0) {
 			accum += dt;
-			if ((hasDas && accum >= REPEAT_DELAY) || (!hasDas && accum >= DAS_DELAY)) {
+			if ((hasDas && accum >= Const.ARR) || (!hasDas && accum >= Const.DAS)) {
 				hasDas = true;
 				move(dir);
 			}
 		}
 	}
 	function updateSoftDrop(dt: Float) {
-		final REPEAT_DELAY = 0.05;
 		static var accum = 0.;
-		if (K.isDown(K.S)) {
-			if (accum == 0 || accum > REPEAT_DELAY)
+		if (K.isDown(Const.config.softDrop)) {
+			if (accum == 0 || accum > Const.SD_DELAY)
 				softDrop();
 			accum += dt;
-		}
-		else
+		} else
 			accum = 0;
 	}
 	function softDrop() {
@@ -735,20 +956,28 @@ class Board {
 		if (K.isPressed(K.R)) {
 			clearBoard();
 		}
-		if (K.isPressed(K.Z)) {
+		if (K.isPressed(Const.config.hardDrop)) {
 			hardDrop();
 		}
-		if (K.isPressed(K.RIGHT)) {
+		if (K.isPressed(Const.config.rotateRight)) {
 			rotate(false);
 		}
-		if (K.isPressed(K.DOWN)) {
+		if (K.isPressed(Const.config.rotateLeft)) {
 			rotate(true);
 		}
-		if (K.isPressed(K.UP)) {
+		if (K.isPressed(Const.config.hold)) {
 			swapHold();
 		}
 		updateSoftDrop(dt);
 		updateMove(dt);
+		current.update(dt);
+		phantom.update(dt);
+		for (col in board) {
+			for (block in col) {
+				if (block != null)
+					block.update(dt);
+			}
+		}
 
 		#if debug
 		if (K.isPressed(K.M)) {
