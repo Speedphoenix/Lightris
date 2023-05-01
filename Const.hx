@@ -117,5 +117,5 @@ typedef InputConfig = {
 		rotateLeft: K.Z,
 		hold: K.C,
 	};
-	static var config = zqsdConfig; // baseConfig;
+	static var config = #if debug zqsdConfig #else baseConfig #end;
 }

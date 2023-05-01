@@ -5236,6 +5236,7 @@ var MainMenu = function(parent) {
 	var _gthis = this;
 	h2d_Flow.call(this,parent);
 	this.boardCont = null;
+	this.backCont = null;
 	this.menuCont = null;
 	this.buttons = null;
 	var tmp = this.dom;
@@ -5266,6 +5267,8 @@ var MainMenu = function(parent) {
 	var __attrib = h2d_FlowLayout.Stack;
 	h2d_domkit_FlowComp.set_layout(tmp1.obj,__attrib);
 	tmp1.initStyle("layout",__attrib);
+	var tmp2 = domkit_Properties.createNew("flow",tmp1,[],{ 'class' : "back-cont", id : "back-cont", 'margin-right' : "540", 'margin-top' : "20", align : "top middle"});
+	this.backCont = tmp2.obj;
 	var tmp1 = domkit_Properties.createNew("flow",tmp,[],{ 'class' : "menu-cont", id : "menu-cont", 'content-align' : "middle middle", scale : "1"});
 	this.menuCont = tmp1.obj;
 	var __attrib = true;
@@ -5305,7 +5308,7 @@ var MainMenu = function(parent) {
 	var __attrib = "PloucPhoenix";
 	tmp2.obj.set_text(__attrib);
 	tmp2.initStyle("text",__attrib);
-	var tmp = domkit_Properties.createNew("flow",tmp1,[],{ 'class' : "how-to-play", spacing : "10", 'margin-right' : "300", 'margin-top' : "60"});
+	var tmp = domkit_Properties.createNew("flow",tmp1,[],{ 'class' : "how-to-play", spacing : "5", 'margin-right' : "400", 'margin-top' : "120"});
 	var __attrib = h2d_FlowLayout.Vertical;
 	h2d_domkit_FlowComp.set_layout(tmp.obj,__attrib);
 	tmp.initStyle("layout",__attrib);
@@ -5316,6 +5319,14 @@ var MainMenu = function(parent) {
 	var __attrib = Main.font;
 	h2d_domkit_TextComp.set_font(tmp2.obj,__attrib);
 	tmp2.initStyle("font",__attrib);
+	var tmp2 = domkit_Properties.createNew("text",tmp,[],null);
+	var __attrib = "Connect the roads to the top";
+	tmp2.obj.set_text(__attrib);
+	tmp2.initStyle("text",__attrib);
+	var tmp2 = domkit_Properties.createNew("text",tmp,[],{ 'max-width' : "180", 'margin-bottom' : "20"});
+	var __attrib = "Save animals on the way to gain points!";
+	tmp2.obj.set_text(__attrib);
+	tmp2.initStyle("text",__attrib);
 	var tmp2 = domkit_Properties.createNew("text",tmp,[],null);
 	var __attrib = "Move left: " + hxd_Key.getKeyName(Const.config.left);
 	tmp2.obj.set_text(__attrib);
@@ -5366,7 +5377,7 @@ var MainMenu = function(parent) {
 	hard.onClick = function() {
 		startGame(1);
 	};
-	var back = new Button("Back",this.boardCont);
+	var back = new Button("Back",this.backCont);
 	back.onClick = $bind(this,this.onBack);
 	MainMenu.style = new h2d_domkit_Style();
 	MainMenu.style.set_allowInspect(false);
@@ -5508,7 +5519,7 @@ Main.prototype = $extend(hxd_App.prototype,{
 		}
 	}
 	,onResize: function() {
-		haxe_Log.trace("resize",{ fileName : "Main.hx", lineNumber : 199, className : "Main", methodName : "onResize", customParams : [this.s2d.width,this.s2d.height]});
+		haxe_Log.trace("resize",{ fileName : "Main.hx", lineNumber : 210, className : "Main", methodName : "onResize", customParams : [this.s2d.width,this.s2d.height]});
 		if(this.board != null) {
 			var _this = this.board.gridCont;
 			_this.posChanged = true;
@@ -54731,8 +54742,8 @@ Const.GRAVITY_PER_LEVEL = [0,0.01667,0.021017,0.026977,0.035256,0.04693,0.06361,
 Const.START_LV = [1,4,8];
 Const.LOCK_DELAY = 0.5;
 Const.LOCK_RESET_MAX = 10;
-Const.zqsdConfig = { left : 81, right : 68, softDrop : 83, hardDrop : 90, rotateRight : 39, rotateLeft : 40, hold : 38};
-Const.config = Const.zqsdConfig;
+Const.baseConfig = { left : 37, right : 39, softDrop : 40, hardDrop : 32, rotateRight : 38, rotateLeft : 90, hold : 67};
+Const.config = Const.baseConfig;
 Xml.Element = 0;
 Xml.PCData = 1;
 Xml.CData = 2;

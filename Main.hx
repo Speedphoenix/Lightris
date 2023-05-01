@@ -71,7 +71,13 @@ class MainMenu extends h2d.Flow implements h2d.domkit.Object {
 			fill-height={true}
 			layout={h2d.Flow.FlowLayout.Stack}
 			padding-left="20"
-		/>
+		>
+			<flow class="back-cont" id
+				margin-right="540"
+				margin-top="20"
+				align="top middle"
+			/>
+		</flow>
 		<flow class="menu-cont" id
 			fill-width={true}
 			fill-height={true}
@@ -102,14 +108,19 @@ class MainMenu extends h2d.Flow implements h2d.domkit.Object {
 			</flow>
 			<flow class="how-to-play"
 				layout={h2d.Flow.FlowLayout.Vertical}
-				spacing="10"
-				margin-right="300"
-				margin-top="60"
+				spacing="5"
+				margin-right="400"
+				margin-top="120"
 			>
 				<text text={"How to play"}
 					font={Main.font}
 					color="#F8DCC1"
 					scale="2"
+				/>
+				<text text={'Connect the roads to the top'}/>
+				<text text={'Save animals on the way to gain points!'}
+					max-width="180"
+					margin-bottom="20"
 				/>
 				<text text={'Move left: ${K.getKeyName(Const.config.left)}'}/>
 				<text text={'Move right: ${K.getKeyName(Const.config.right)}'}/>
@@ -142,7 +153,7 @@ class MainMenu extends h2d.Flow implements h2d.domkit.Object {
 		medium.onClick = () -> startGame(0);
 		hard.onClick = () -> startGame(1);
 
-		var back = new Button("Back", boardCont);
+		var back = new Button("Back", backCont);
 		back.onClick = onBack;
 
 		style = new h2d.domkit.Style();
