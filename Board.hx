@@ -15,6 +15,11 @@ using Main;
 // fix that L rotation on the rotation table
 // increase level, display level
 // getting locked feedback
+// pausing the game
+// limit soft drop lock increase when softdropping
+// hide targets before reaching x lines within/make them non-tinteractible
+// 			it's a pain to hard drop on them
+// display the current difficulty
 
 // for better generated pieces:
 // generate all possibles during startup

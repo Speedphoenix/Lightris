@@ -1,0 +1,5 @@
+*.swp
+*.sop
+*.hl
+res/.tmp
+res/.tmp/
