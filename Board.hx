@@ -1047,6 +1047,8 @@ class Board {
 		checkDefeat();
 	}
 	function checkDefeat() {
+		if (gameIsOver)
+			return;
 		if (collides(current)) {
 			triggerDefeat(TopOut);
 		}
