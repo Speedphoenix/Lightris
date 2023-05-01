@@ -6,7 +6,7 @@ using Main;
 
 // TODO TOMORROW
 // Menu principal + credits
-// 		How to play
+// 		How to play (controls, objective, clearing a line doesn't do anything)
 // 		Make all the texts images
 // defeat condition
 // gravity
@@ -23,6 +23,7 @@ using Main;
 // generate all possibles during startup
 // assign weight on number of exits and road types (4-roads should be rarer)
 // low exits and high exits should be rare
+// maybe allow separate paths if it's 2 and 2 ?
 
 enum RandomMode {
 	FullRandom;
@@ -75,7 +76,7 @@ class BoardUI extends h2d.Flow implements h2d.domkit.Object {
 				/>
 			</flow>
 			<flow class="score-cont" id
-				valign={h2d.Flow.FlowAlign.Middle}
+				align="middle right"
 				background={panelBG}
 				padding={padding}
 				layout={h2d.Flow.FlowLayout.Vertical}
@@ -83,10 +84,11 @@ class BoardUI extends h2d.Flow implements h2d.domkit.Object {
 				spacing={{x: 0, y: 15}}
 				min-width={168}
 				min-height={140}
+				margin-left="-600"
 			>
 				<text id="score"/>
 				<flow id="animalsCont"
-					spacing={{x: 15, y: 0}}
+					spacing={{x: 5, y: 0}}
 					valign={h2d.Flow.FlowAlign.Bottom}
 				/>
 			</flow>
@@ -246,11 +248,19 @@ class Block {
 		});
 		if (roadInf != null)
 			roadBmp.tile = (on || phantomOn) ? roadInf.activeGfx.toTile() : roadInf.gfx.toTile();
+		roadBmp.visible = roadInf != null;
 		if (!phantomOn || on) {
 			phantomAddColor.set(0, 0, 0);
 			effectElapsed = 0;
 		}
-		roadBmp.visible = roadInf != null;
+		if (inf.id == Target) {
+			if (phantomOn && !on) {
+				roadBmp.tile = Data.mino.get(TargetObtained).gfx.toTile();
+				roadBmp.visible = true;
+			} else {
+				roadBmp.visible = false;
+			}
+		}
 		if (isPhantom) {
 			trace("getting a road", roadInf?.id, "at", obj.x, obj.y, roadBmp.tile == null);
 		}
@@ -559,7 +569,7 @@ class Board {
 	var lockedObj : SceneObject;
 	var phantomCont : SceneObject;
 	var tf : h2d.Text;
-	var fullUi : BoardUI;
+	public var fullUi : BoardUI;
 
 	// 0, 0 is bottom LEFT
 	var board: Array<Array<Block>> = [];

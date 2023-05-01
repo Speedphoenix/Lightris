@@ -37,7 +37,7 @@ typedef InputConfig = {
 	// static final MIN_ROADED_PER_PIECE = 4;
 	// static final MAX_EXIT_BLOCKS = 3;
 
-	static final USE_DEFAULT_ROADS = true;
+	static var USE_DEFAULT_ROADS = true; // not constant
 
     static final MINO_COUNT = 7;
 	static final NEXT_QUEUE_SIZE = 5;
