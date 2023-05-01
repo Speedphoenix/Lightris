@@ -35,7 +35,7 @@
 					"kind": null
 				},
 				{
-					"typeStr": "10:AlwaysOn,Empty,HideRoads,AllRoads",
+					"typeStr": "10:AlwaysOn,Empty,HideRoads,AllRoads,IsCasernL,IsCasernR,ForceTruck",
 					"name": "flags"
 				},
 				{
@@ -384,7 +384,7 @@
 						"x": 0,
 						"y": 0
 					},
-					"flags": 13,
+					"flags": 29,
 					"props": {},
 					"group": 1
 				},
@@ -396,7 +396,7 @@
 						"y": 0
 					},
 					"rotation": "None",
-					"flags": 13,
+					"flags": 45,
 					"props": {},
 					"gfx": {
 						"file": "Starting.png",
@@ -414,7 +414,7 @@
 						"y": 0
 					},
 					"rotation": "None",
-					"flags": 12,
+					"flags": 28,
 					"props": {
 						"activeBlock": "EndLLit"
 					},
@@ -434,7 +434,7 @@
 						"y": 0
 					},
 					"rotation": "None",
-					"flags": 12,
+					"flags": 44,
 					"props": {
 						"activeBlock": "EndRLit"
 					},
@@ -454,7 +454,7 @@
 						"y": 0
 					},
 					"rotation": "None",
-					"flags": 12,
+					"flags": 92,
 					"props": {},
 					"gfx": {
 						"file": "EndLit.png",
@@ -472,7 +472,7 @@
 						"y": 0
 					},
 					"rotation": "None",
-					"flags": 12,
+					"flags": 108,
 					"props": {},
 					"gfx": {
 						"file": "EndLit.png",
@@ -546,7 +546,7 @@
 						"y": 0
 					},
 					"rotation": "None",
-					"flags": 13,
+					"flags": 77,
 					"props": {},
 					"group": 1,
 					"gfx": {

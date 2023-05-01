@@ -1,5 +1,6 @@
 
 import hxd.Key as K;
+import h2d.col.Point;
 using Extensions;
 using Const;
 using Main;
@@ -276,6 +277,173 @@ class RandomProvider {
 	}
 }
 
+class Truck {
+	public var x: Float; // center of the truck
+	public var y: Float;
+	public var obj: SceneObject;
+	var bmp: SceneBitmap;
+	var lightsBmp: SceneBitmap;
+	var tile: h2d.Tile;
+	var lightTile: h2d.Tile;
+	var lightsTime = 0.;
+	var rotation(default, set): Direction;
+	var isMoving(get, never): Bool;
+	function get_isMoving() {
+		return !currPath.isEmpty();
+	}
+
+	public var tx(get, never): Int;
+	function get_tx() {
+		return hxd.Math.floor(x / Const.SIDE);
+	}
+	public var ty(get, never): Int;
+	function get_ty() {
+		return hxd.Math.floor(y / Const.SIDE);
+	}
+
+	function set_rotation(v) {
+		tile.setPosition(v * 8, 0);
+		lightTile.setPosition(v * 8, 0);
+		return rotation = v;
+	}
+
+	public function new(start: Block, ?parent) {
+		obj = new SceneObject(parent);
+		tile = hxd.Res.SpriteSheetCamion.toTile();
+		tile.setSize(8, 8);
+		lightTile = hxd.Res.TruckLights.toTile();
+		lightTile.setSize(8, 8);
+		this.rotation = Right;
+		bmp = new SceneBitmap(tile, obj);
+		lightsBmp = new SceneBitmap(lightTile, obj);
+		obj.dom.addClass("truck");
+		var p = getPos(start);
+		this.x = p.x;
+		this.y = p.y;
+	}
+	inline function getPos(b: Block) {
+		var p = new Point((b.x + 0.5) * Const.SIDE, (b.y + 0.5) * Const.SIDE);
+		if (b.inf.flags.has(IsCasernL)) {
+			p.x += 9;
+			p.y -= 1;
+		} else if (b.inf.flags.has(IsCasernR)) {
+			p.x -= 9;
+			p.y -= 1;
+		}
+		return p;
+	}
+
+	var currTarget: Block = null;
+	var currPath: Array<Point> = [];
+	public function update(dt: Float) {
+		var target = Board.inst.highestOnBlock;
+		if (
+			target != null
+			&& target.inf.id != SourceL
+			&& target.inf.id != SourceR
+			&& target != currTarget
+			&& (!isMoving || !currTarget.inf.flags.has(ForceTruck))
+		) {
+			currTarget = target;
+			buildPath();
+		}
+		var range = Const.TRUCK_SPEED * dt;
+		var prevx = x;
+		var prevy = y;
+		while (range > 0 && !currPath.isEmpty()) {
+			var step = currPath.last();
+			var pos = new Point(x, y);
+			var d = step.distance(pos);
+			if (range >= d) {
+				x = step.x;
+				y = step.y;
+				range -= d;
+				currPath.pop();
+			} else {
+				var dir = step.sub(pos);
+				dir.normalize();
+				dir.scale(range);
+				var newPos = pos.add(dir);
+				x = newPos.x;
+				y = newPos.y;
+				range = -1;
+			}
+		}
+		if (prevx < x)
+			rotation = Right;
+		else if (prevx > x)
+			rotation = Left;
+		else if (prevy < y)
+			rotation = Up;
+		else if (prevy > y)
+			rotation = Down;
+		obj.x = x - 4;
+		obj.y = y * -1 - 4;
+		if (isMoving) {
+			lightsBmp.visible = true;
+			var side = Math.round(lightsTime * Const.TRUCK_LIGHTS_FREQUENCY) % 2;
+			lightTile.setPosition(rotation * 8, side * 8);
+			lightsTime += dt;
+		} else {
+			lightsBmp.visible = false;
+			lightsTime = 0;
+		}
+	}
+	function buildRec(x: Int, y: Int) {
+		var board = Board.inst;
+		var b = board.board[x][y];
+		if (b == currTarget)
+			return true;
+		for (k in 0...4) {
+			var r: Direction = k;
+			var i = b.x;
+			var j = b.y;
+			switch (r) {
+				case Up: 	j++;
+				case Right:	i++;
+				case Down:	j--;
+				case Left:	i--;
+			}
+			if (i < 0 || i >= Const.BOARD_WIDTH || j < 0 || j >= board.boardMax())
+				continue;
+			if (board.blockIsEmpty(i, j))
+				continue;
+			var curr = board.board[i][j];
+			if (!b.hasDir(r) || !curr.on || curr.pathFrom != null || !curr.hasDir(r.rotateBy(2)))
+				continue;
+			curr.pathFrom = b;
+			if (buildRec(i, j))
+				return true;
+		}
+		return false;
+	}
+	function buildPath() {
+		var b = Board.inst;
+		currPath.clear();
+		var start = b.board[tx][ty];
+		if (b.blockIsEmpty(tx, ty) || !start.on)
+			return;
+		for (i in 0...b.board.length) {
+			for (j in 0...b.board[i].length) {
+				if (!b.blockIsEmpty(i, j)) {
+					b.board[i][j].pathFrom = null;
+				}
+			}
+		}
+		start.pathFrom = start;
+		buildRec(tx, ty);
+
+		var curr = currTarget;
+		while (curr != null && curr != curr.pathFrom && curr.pathFrom != null) {
+			currPath.push(getPos(curr));
+			curr = curr.pathFrom;
+		}
+		// possibly uncomment
+		// currPath.push(getPos(curr));
+	}
+}
+
+
 class Block {
 	public var x: Int;
 	public var y: Int;
@@ -292,6 +460,8 @@ class Block {
 	public var isPhantom = false;
 	public var isEmpty = false;
 	public var phantomAddColor = new h3d.Vector();
+
+	public var pathFrom: Block;
 
 	function set_on(v) {
 		if (v && inf.props.activeBlock != null) {
@@ -687,7 +857,7 @@ class Board {
 	public var fullUi : BoardUi;
 
 	// 0, 0 is bottom LEFT
-	var board: Array<Array<Block>> = [];
+	public var board: Array<Array<Block>> = [];
 	var current: Piece = null;
 	var phantom: Piece = null;
 	var hold: Piece = null;
@@ -721,6 +891,10 @@ class Board {
 	function get_gameIsOver() {
 		return resultUi != null;
 	}
+
+	public var truck: Truck;
+	public var parkedTruck: Truck;
+	public var highestOnBlock = null;
 
 	var seed = Std.random(0x7FFFFFFF);
 	public static var rnd: hxd.Rand;
@@ -1012,9 +1186,10 @@ class Board {
 			var source = new Block(x, y, Data.mino.get(k), lockedObj);
 			board[x][y].obj.remove();
 			board[x][y] = source;
+			return source;
 		}
-		makeSource(4, 0, SourceL);
-		makeSource(5, 0, SourceR);
+		var source1 = makeSource(4, 0, SourceL);
+		var source2 = makeSource(5, 0, SourceR);
 
 		animals = [];
 		fullUi.setScore(score);
@@ -1026,6 +1201,14 @@ class Board {
 		spawnTargets();
 		nextMino();
 		updateConnections();
+		highestOnBlock = null;
+		if (truck != null)
+			truck.obj.remove();
+		truck = new Truck(source1, boardObj);
+		if (parkedTruck != null)
+			parkedTruck.obj.remove();
+		parkedTruck = new Truck(source2, boardObj);
+		parkedTruck.update(0);
 	}
 
 	function spawnTargets() {
@@ -1099,14 +1282,20 @@ class Board {
 				continue;
 			if (!b.hasDir(r) || curr.on || !curr.hasDir(r.rotateBy(2)) || (forPhantom && curr.phantomOn))
 				continue;
-			if (forPhantom)
+			if (forPhantom) {
 				curr.phantomOn = true;
-			else
+			} else {
 				curr.on = true;
+				if (highestOnBlock == null || j > highestOnBlock.y
+					|| (j == highestOnBlock.y && !highestOnBlock.hasDir(Up) && curr.hasDir(Up))
+				) {
+					highestOnBlock = curr;
+				}
+			}
 			fillRec(i, j, forPhantom);
 		}
 	}
-	function boardMax() {
+	public function boardMax() {
 		return Const.BOARD_FULL_HEIGHT + currentScroll;
 	}
 	function fillPhantom() {
@@ -1185,6 +1374,7 @@ class Board {
 		targets.reverseFor(function(t) {
 			if (t.on) {
 				targets.remove(t);
+				highestOnBlock = t;
 				animals.push(Data.animal.all[animalsBag.getNext()]);
 				if (targetCount < 0)
 					spawnNextTarget();
@@ -1312,6 +1502,8 @@ class Board {
 					block.update(dt);
 			}
 		}
+		if (truck != null)
+			truck.update(dt);
 
 		#if debug
 		if (K.isPressed(K.M)) {

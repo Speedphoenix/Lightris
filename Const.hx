@@ -57,6 +57,8 @@ typedef InputConfig = {
 	static final BOARD_HEIGHT = 20;
 	static final BOARD_TOP_EXTRA = 3;
 	static final BOARD_FULL_HEIGHT = BOARD_HEIGHT + BOARD_TOP_EXTRA;
+	static final TRUCK_SPEED = SIDE * 1.8; // pixels per second
+	static final TRUCK_LIGHTS_FREQUENCY = 3;
 
 	static final ARR = 0.033;
 	static final DAS = 0.15;
