@@ -1,13 +1,9 @@
 -lib heaps
 -lib castle
 -lib domkit
--lib hlsdl
 
--D windowSize=1024x800
 -D domkit_heaps
--D debug
-
--hl lightris.hl
+-js lightris.js
 -main Main
 -cp .
 

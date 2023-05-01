@@ -1,3 +1,4 @@
+import hxd.Key as K;
 using Extensions;
 
 @:uiComp("button")
@@ -7,9 +8,13 @@ class Button extends h2d.Flow implements h2d.domkit.Object {
 		padding="15"
 		padding-top="11"
 		content-halign={h2d.Flow.FlowAlign.Middle}
-		min-width="100"
+		min-width="130"
 	>
-		<text id="labelTxt" text={text} />
+		<text id="labelTxt"
+			text={text}
+			font={Main.font}
+			scale="2"
+		/>
 	</button>
 
 	public function new(text="", ?parent) {
@@ -72,16 +77,47 @@ class MainMenu extends h2d.Flow implements h2d.domkit.Object {
 			fill-height={true}
 			layout={h2d.Flow.FlowLayout.Stack}
 			content-align="middle middle"
+			scale="1"
 		>
+			<flow class="title-cont"
+				layout="vertical"
+				margin-bottom="180"
+			>
+				<text text={Const.TITLE}
+					scale="3"
+				/>
+			</flow>
 			<flow class="credits"
 				layout={h2d.Flow.FlowLayout.Vertical}
 				spacing="10"
 				margin-left="250"
 			>
-				<text text={"Created By:"}/>
-				<text text={"Leonardo Jeanteur"}/>
-				<text text={"Sylvain Legay"}/>
-				<text text={"Margaux Berard"}/>
+				<text text={"CREATED BY:"}
+					font={Main.font}
+					color="#F8DCC1"
+				/>
+				<text text={"Speedphoenix"}/>
+				<text text={"Jean-Phénix De"}/>
+				<text text={"PloucPhoenix"}/>
+			</flow>
+			<flow class="how-to-play"
+				layout={h2d.Flow.FlowLayout.Vertical}
+				spacing="10"
+				margin-right="300"
+				margin-top="60"
+			>
+				<text text={"How to play"}
+					font={Main.font}
+					color="#F8DCC1"
+					scale="2"
+				/>
+				<text text={'Move left: ${K.getKeyName(Const.config.left)}'}/>
+				<text text={'Move right: ${K.getKeyName(Const.config.right)}'}/>
+				<text text={'Soft drop: ${K.getKeyName(Const.config.softDrop)}'}/>
+				<text text={'Hard drop: ${K.getKeyName(Const.config.hardDrop)}'}/>
+				<text text={'Rotate right: ${K.getKeyName(Const.config.rotateRight)}'}/>
+				<text text={'Rotate left: ${K.getKeyName(Const.config.rotateLeft)}'}/>
+				<text text={'Hold: ${K.getKeyName(Const.config.hold)}'}/>
 			</flow>
 			<flow id="buttons"
 				layout={h2d.Flow.FlowLayout.Vertical}
@@ -95,32 +131,19 @@ class MainMenu extends h2d.Flow implements h2d.domkit.Object {
 	public function new(?parent) {
 		super(parent);
 		initComponent();
-		function startGame() {
+		function startGame(difficulty = 0) {
 			menuCont.visible = false;
 			boardCont.visible = true;
 			Main.inst.board = new Board();
-			Main.inst.board.init(boardCont);
+			Main.inst.board.init(difficulty, boardCont);
 		}
 		var medium = new Button("Medium", buttons);
 		var hard = new Button("Hard", buttons);
-		medium.onClick = function() {
-			Const.USE_DEFAULT_ROADS = false;
-			startGame();
-		}
-		hard.onClick = function() {
-			Const.USE_DEFAULT_ROADS = true;
-			startGame();
-		}
+		medium.onClick = () -> startGame(0);
+		hard.onClick = () -> startGame(1);
 
 		var back = new Button("Back", boardCont);
-		back.onClick = function() {
-			menuCont.visible = true;
-			boardCont.visible = false;
-			if (Main.inst.board != null) {
-				Main.inst.board.fullUi.remove();
-				Main.inst.board = null;
-			}
-		}
+		back.onClick = onBack;
 
 		style = new h2d.domkit.Style();
 		style.allowInspect = #if debug true #else false #end;
@@ -131,15 +154,37 @@ class MainMenu extends h2d.Flow implements h2d.domkit.Object {
 		// newGame.onClick();
 		#end
 	}
+
+	public function onBack() {
+		menuCont.visible = true;
+		boardCont.visible = false;
+		if (Main.inst.board != null) {
+			Main.inst.board.fullUi.remove();
+			Main.inst.board = null;
+		}
+	}
 }
 
 class Main extends hxd.App {
 	public var board: Board;
+	public var menu: MainMenu;
 	public static var inst: Main;
+
+	public static var font: h2d.Font;
+
+	// var tf = new h2d.Text(font, s2d);
+	// tf.textColor = 0xFFFFFF;
+	// tf.dropShadow = { dx : 0.5, dy : 0.5, color : 0xFF0000, alpha : 0.8 };
+	// tf.text = "Héllò h2d !";
+
+	// tf.y = 20;
+	// tf.x = 20;
+	// tf.scale(7);
 
 	override function init() {
 		inst = this;
-		new MainMenu(s2d);
+		font = hxd.Res.customFont.toFont();
+		menu = new MainMenu(s2d);
 		onResize();
 	}
 	static function main() {

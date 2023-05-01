@@ -415,7 +415,9 @@
 					},
 					"rotation": "None",
 					"flags": 12,
-					"props": {},
+					"props": {
+						"activeBlock": "EndLLit"
+					},
 					"group": 1,
 					"gfx": {
 						"file": "EndUnlit.png",
@@ -433,7 +435,9 @@
 					},
 					"rotation": "None",
 					"flags": 12,
-					"props": {},
+					"props": {
+						"activeBlock": "EndRLit"
+					},
 					"gfx": {
 						"file": "EndUnlit.png",
 						"size": 32,
@@ -523,7 +527,9 @@
 					},
 					"rotation": "None",
 					"flags": 12,
-					"props": {},
+					"props": {
+						"activeBlock": "TargetObtained"
+					},
 					"group": 1,
 					"gfx": {
 						"file": "SpriteSheetBloc.png",
@@ -557,7 +563,7 @@
 						"x": 0,
 						"y": 0
 					},
-					"rotation": "Main",
+					"rotation": "None",
 					"flags": 6,
 					"props": {},
 					"group": 1,
@@ -575,8 +581,8 @@
 						"x": 0,
 						"y": 0
 					},
-					"rotation": "Main",
-					"flags": 0,
+					"rotation": "None",
+					"flags": 6,
 					"props": {},
 					"gfx": {
 						"file": "Fog.png",
@@ -599,7 +605,8 @@
 			],
 			"props": {
 				"hasIndex": true,
-				"hasGroup": true
+				"hasGroup": true,
+				"displayIcon": "gfx"
 			}
 		},
 		{
@@ -1631,7 +1638,9 @@
 				}
 			],
 			"separators": [],
-			"props": {}
+			"props": {
+				"hasIndex": true
+			}
 		},
 		{
 			"name": "rotation@rotate",
@@ -1742,6 +1751,12 @@
 				{
 					"typeStr": "14",
 					"name": "animal",
+					"opt": true,
+					"kind": null
+				},
+				{
+					"typeStr": "6:mino",
+					"name": "activeBlock",
 					"opt": true,
 					"kind": null
 				}
