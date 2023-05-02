@@ -92,7 +92,9 @@ class ResultUi extends h2d.Flow implements h2d.domkit.Object {
 		} else {
 			switch (reason) {
 				case TopOut:
-					desc = "You topped out";
+					title = "VICTORY";
+					desc = 'You have delivered $score animals!';
+					// desc = "You topped out";
 				case ConnectionLost:
 					desc = "You lost the road connection";
 				case AnimalLost:

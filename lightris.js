@@ -2885,7 +2885,8 @@ var ResultUi = function(isWin,reason,parent) {
 		} else {
 			switch(reason._hx_index) {
 			case 0:
-				desc = "You topped out";
+				title = "VICTORY";
+				desc = "You have delivered " + score + " animals!";
 				break;
 			case 1:
 				desc = "You lost the road connection";
@@ -3665,10 +3666,10 @@ var Piece = function(i,follow,parent) {
 			var elapsed = HxOverrides.now() / 1000 - stamp;
 			var elapsedStr = this.fToString(elapsed);
 			if(tries > 2000) {
-				haxe_Log.trace("TOOK ALL TRIES, FALLBACK",{ fileName : "Board.hx", lineNumber : 607, className : "Piece", methodName : "new"});
+				haxe_Log.trace("TOOK ALL TRIES, FALLBACK",{ fileName : "Board.hx", lineNumber : 614, className : "Piece", methodName : "new"});
 			}
 			var tmp = this.inf.id;
-			haxe_Log.trace("Block " + (tmp == null ? "null" : tmp) + " took " + tries + " tries to find (" + elapsedStr + ", " + elapsed + " s). Valid: " + Std.string(this.areRoadsValid()),{ fileName : "Board.hx", lineNumber : 608, className : "Piece", methodName : "new"});
+			haxe_Log.trace("Block " + (tmp == null ? "null" : tmp) + " took " + tries + " tries to find (" + elapsedStr + ", " + elapsed + " s). Valid: " + Std.string(this.areRoadsValid()),{ fileName : "Board.hx", lineNumber : 615, className : "Piece", methodName : "new"});
 		}
 	}
 	this.obj.dom.addClass(this.inf.id.toLowerCase());
@@ -4078,7 +4079,7 @@ Board.prototype = {
 		this.targetCount = Const.TARGET_COUNT[difficulty];
 		Const.USE_DEFAULT_ROADS = difficulty > 0;
 		this.fullUi = new BoardUi(root);
-		haxe_Log.trace("Seed: " + this.seed,{ fileName : "Board.hx", lineNumber : 920, className : "Board", methodName : "init"});
+		haxe_Log.trace("Seed: " + this.seed,{ fileName : "Board.hx", lineNumber : 927, className : "Board", methodName : "init"});
 		Board.rnd = new hxd_Rand(this.seed);
 		this.bag = new RandomProvider(Board.rnd,RandomMode.Bag,Const.MINO_COUNT);
 		this.animalsBag = new RandomProvider(Board.rnd,RandomMode.Bag,Data.animal.all.length);
