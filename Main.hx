@@ -142,16 +142,17 @@ class MainMenu extends h2d.Flow implements h2d.domkit.Object {
 	public function new(?parent) {
 		super(parent);
 		initComponent();
-		function startGame(difficulty = 0) {
-			menuCont.visible = false;
-			boardCont.visible = true;
-			Main.inst.board = new Board();
-			Main.inst.board.init(difficulty, boardCont);
+		// tf.dropShadow = { dx : 0.5, dy : 0.5, color : 0xFF0000, alpha : 0.8 };
+
+		for (mode in Data.mode.all) {
+			var button = new Button(mode.name, buttons);
+			button.onClick = function() {
+				menuCont.visible = false;
+				boardCont.visible = true;
+				Main.inst.board = new Board();
+				Main.inst.board.init(mode, boardCont);
+			}
 		}
-		var medium = new Button("Medium", buttons);
-		var hard = new Button("Hard", buttons);
-		medium.onClick = () -> startGame(0);
-		hard.onClick = () -> startGame(1);
 
 		var back = new Button("Back", backCont);
 		back.onClick = onBack;
@@ -183,17 +184,14 @@ class Main extends hxd.App {
 
 	public static var font: h2d.Font;
 
-	// var tf = new h2d.Text(font, s2d);
-	// tf.textColor = 0xFFFFFF;
-	// tf.dropShadow = { dx : 0.5, dy : 0.5, color : 0xFF0000, alpha : 0.8 };
-	// tf.text = "Héllò h2d !";
-
-	// tf.y = 20;
-	// tf.x = 20;
-	// tf.scale(7);
-
 	override function init() {
 		inst = this;
+		var cdbData = hxd.Res.data.entry.getText();
+		Data.load(cdbData, false);
+		hxd.Res.data.watch(function() {
+			var cdbData = hxd.Res.data.entry.getText();
+			Data.load(cdbData, true);
+		});
 		font = hxd.Res.customFont.toFont();
 		menu = new MainMenu(s2d);
 		onResize();

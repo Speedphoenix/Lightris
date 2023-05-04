@@ -1,0 +1,88 @@
+.cdb .cdb-sheet tr.separator td {
+  background-color: #151515;
+}
+.cdb .cdb-sheet td {
+  border-left: 1px solid #151515;
+}
+.cdb .cdb-sheet tr {
+  border-bottom: 1px solid #151515;
+}
+.cdb .cdb-sheet td.start {
+  background-color: #0e0e0e;
+  color: #4d4d4d;
+}
+.cdb .cdb-sheet th.start {
+  width: 15px;
+}
+.hide-tileselect .tile {
+  zoom: 1 !important;
+}
+.tinyColumn {
+  width: 32px !important;
+}
+.tinyTile .tile {
+  zoom: 0.33;
+}
+.cdb-sheet tr.selected .n_gfx,
+.cdb-sheet tr.cursorLine .n_gfx,
+.cdb-sheet tr.selected .t_bool,
+.cdb-sheet tr.cursorLine .t_bool {
+  background-color: #29313a;
+}
+.cdb-sheet .n_id,
+.cdb-sheet .t_ref {
+  color: #b38caa;
+}
+.cdb-sheet .t_flags {
+  color: #798cc0;
+}
+.cdb-sheet .t_bool {
+  width: 40px !important;
+  background-color: #1d1d1d;
+}
+.cdb-sheet .t_bool.true {
+  background-color: #1e271c;
+}
+.cdb-sheet .t_bool.false {
+  background-color: #362125;
+}
+.cdb-sheet .n_desc,
+.cdb-sheet .n_texts {
+  color: #7e888b;
+}
+.cdb-sheet td.t_string:not(.t_loc):not(.t_script) {
+  color: #3a7935;
+}
+.cdb-sheet .t_enum {
+  color: #53ccae;
+}
+.cdb-sheet .n_attributes {
+  color: #cfc48f;
+}
+.cdb-sheet .n_gfx {
+  background-color: #1f1f1f;
+}
+.cdb-sheet .n_color {
+  width: 32px !important;
+}
+.cdb-sheet .sublist-pad-0 {
+  background-color: #333333;
+}
+.cdb-sheet .sublist-pad-1 {
+  background-color: #3f3f3f;
+}
+.cdb-sheet .sublist-pad-2 {
+  background-color: #4e4e4e;
+}
+.cdb-sheet .sublist-pad-3 {
+  background-color: #585858;
+}
+.cdb-sheet .sublist-pad-4 {
+  background-color: #757575;
+}
+.cdb-sheet .sublist-pad-5 {
+  background-color: #999999;
+}
+.cdb-sheet tr.no-ref td.start {
+  background-color: #551616;
+}

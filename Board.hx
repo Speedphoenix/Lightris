@@ -589,11 +589,16 @@ class Piece {
 		} else {
 			inf = Data.mino.all[i];
 			blocks = [for (b in inf.blocks) new Block(b.x, b.y, inf, obj)];
-			if (Const.USE_DEFAULT_ROADS) {
+			var mode = Board.inst.mode.id;
+			var useDefaultRoads = inf.blocks.any(b -> b.defaultRoads.any(r -> r.modeId == mode));
+			if (useDefaultRoads) {
 				for (i in 0...inf.blocks.length) {
-					var rds = inf.blocks[i].defaultRoads.match;
-					for (j in 0...4) {
-						blocks[i].roads[j] = rds[j].v;
+					var def = inf.blocks[i].defaultRoads.find(r -> r.modeId == mode);
+					if (def != null) {
+						var rds = def.roads.match;
+						for (j in 0...4) {
+							blocks[i].roads[j] = rds[j].v;
+						}
 					}
 				}
 			} else {
@@ -802,8 +807,11 @@ class Piece {
 		return true;
 	}
 	public function areRoadsValid() {
+		var conf = Board.inst.mode.minoGeneration;
+		if (conf == null)
+			return true;
 		var roadedBlocks = blocks.filter(b -> b.roads.count(r -> r) > 0);
-		if (roadedBlocks.length < Const.MIN_ROADED_PER_PIECE)
+		if (roadedBlocks.length < conf.minRoaded)
 			return false;
 		if (roadedBlocks.any(b -> b.roads.count(r -> r) == 1))
 			return false;
@@ -836,9 +844,9 @@ class Piece {
 				}
 			}
 		}
-		if (separateExitSets < Const.MIN_SEPARATE_EXITS)
+		if (separateExitSets < conf.minSeparateExits)
 			return false;
-		if (exitBlocks > Const.MAX_EXIT_BLOCKS || exitBlocks < Const.MIN_EXIT_BLOCKS)
+		if (exitBlocks > conf.maxExitBlocks || exitBlocks < conf.minExitBlocks)
 			return false;
 
 		return true;
@@ -870,7 +878,7 @@ class Board {
 	var hold: Piece = null;
 	var heldOnce = false;
 	var nextQueue: Array<Piece> = [];
-	var difficulty = 0;
+	public var mode: Data.Mode;
 	var level = 1;
 	public var targetCount = 1; // -1 for endless
 	var currDrop = 0.; // increases per frame depending on gravity
@@ -909,18 +917,11 @@ class Board {
 
 	public function new() {}
 
-	public function init(difficulty = 0, root: h2d.Object) {
+	public function init(mode: Data.Mode, root: h2d.Object) {
 		inst = this;
-		var cdbData = hxd.Res.data.entry.getText();
-		Data.load(cdbData, false);
-		hxd.Res.data.watch(function() {
-			var cdbData = hxd.Res.data.entry.getText();
-			Data.load(cdbData, true);
-		});
-		this.difficulty = difficulty;
-		this.level = Const.START_LV[difficulty];
-		this.targetCount = Const.TARGET_COUNT[difficulty];
-		Const.USE_DEFAULT_ROADS = difficulty > 0;
+		this.mode = mode;
+		this.level = mode.startLevel;
+		this.targetCount = mode.targetCount;
 
 		fullUi = new BoardUi(root);
 

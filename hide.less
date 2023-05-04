@@ -1,0 +1,106 @@
+
+.cdb .cdb-sheet tr.separator td {
+    background-color: #151515;
+}
+.cdb .cdb-sheet td {
+    border-left: 1px solid #151515;
+}
+.cdb .cdb-sheet tr {
+    border-bottom: 1px solid #151515;
+}
+.cdb .cdb-sheet td.start {
+	background-color: #0e0e0e;
+	color: #4d4d4d;
+}
+.cdb .cdb-sheet th.start {
+	width: 15px;
+}
+
+.hide-tileselect {
+	.tile {
+		zoom: 1.0 !important;
+	}
+}
+
+.tinyColumn {
+	width: 32px !important;
+}
+.tinyTile {
+	.tile {
+		zoom: 0.33;
+	}
+}
+
+.cdb-sheet {
+	tr.selected, tr.cursorLine{
+		.n_gfx, .t_bool {
+			background-color: rgb(41, 49, 58);
+		}
+	}
+	.n_id, .t_ref {
+		color: #b38caa;
+	}
+	.t_flags {
+		color: #798cc0;
+	}
+	.t_bool{
+		width: 40px !important;
+		background-color: #1d1d1d;
+		&.true{
+			background-color: #1e271c;
+		}
+		&.false{
+			background-color: #362125;
+		}
+	}
+	.n_desc, .n_texts {
+		color: #7e888b;
+	}
+
+	// Comments and text that is not displayed ingame
+	td.t_string:not(.t_loc):not(.t_script) {
+		color: #3a7935;
+	}
+
+	.t_enum {
+		color: #53ccae;
+	}
+	.n_attributes{
+		color: #cfc48f;
+	}
+	.n_gfx {
+		background-color: #1f1f1f;
+	}
+	.n_color {
+		.tinyColumn;
+	}
+
+	// Monochrome sublist indents
+	.sublist-pad-0 {
+		background-color: #333333;
+	}
+	.sublist-pad-1 {
+		background-color: #3f3f3f;
+	}
+	.sublist-pad-2 {
+		background-color: #4e4e4e;
+	}
+	.sublist-pad-3 {
+		background-color: #585858;
+	}
+	.sublist-pad-4 {
+		background-color: #757575;
+	}
+	.sublist-pad-5 {
+		background-color: #999999;
+	}
+
+	tr.has-ref {
+		// background-color: rgb(31, 61, 31);
+	}
+
+	tr.no-ref td.start {
+		background-color: rgb(85, 22, 22);
+		// border: solid #8d3636;
+	}
+}

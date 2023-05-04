@@ -57,22 +57,58 @@
 						{
 							"x": 0,
 							"y": 0,
-							"defaultRoads": "LineVertical"
+							"defaultRoads": [
+								{
+									"roads": "LineVertical",
+									"mode": "Hard_NoRotate"
+								},
+								{
+									"roads": "TDown",
+									"mode": "Generated_New"
+								}
+							]
 						},
 						{
 							"x": 0,
 							"y": 1,
-							"defaultRoads": "LineVertical"
+							"defaultRoads": [
+								{
+									"roads": "LineVertical",
+									"mode": "Hard_NoRotate"
+								},
+								{
+									"roads": "None",
+									"mode": "Generated_New"
+								}
+							]
 						},
 						{
 							"x": 1,
 							"y": 1,
-							"defaultRoads": "LineVertical"
+							"defaultRoads": [
+								{
+									"roads": "LineVertical",
+									"mode": "Hard_NoRotate"
+								},
+								{
+									"roads": "TRight",
+									"mode": "Generated_New"
+								}
+							]
 						},
 						{
 							"x": 1,
 							"y": 0,
-							"defaultRoads": "LineVertical"
+							"defaultRoads": [
+								{
+									"roads": "LineVertical",
+									"mode": "Hard_NoRotate"
+								},
+								{
+									"roads": "CornerUpLeft",
+									"mode": "Generated_New"
+								}
+							]
 						}
 					],
 					"pivot": {
@@ -102,22 +138,58 @@
 						{
 							"x": -1,
 							"y": 0,
-							"defaultRoads": "TRight"
+							"defaultRoads": [
+								{
+									"roads": "TRight",
+									"mode": "Hard_NoRotate"
+								},
+								{
+									"roads": "Cross",
+									"mode": "Generated_New"
+								}
+							]
 						},
 						{
 							"x": 0,
 							"y": 0,
-							"defaultRoads": "LineHorizontal"
+							"defaultRoads": [
+								{
+									"roads": "LineHorizontal",
+									"mode": "Hard_NoRotate"
+								},
+								{
+									"roads": "LineHorizontal",
+									"mode": "Generated_New"
+								}
+							]
 						},
 						{
 							"x": 1,
 							"y": 0,
-							"defaultRoads": "LineHorizontal"
+							"defaultRoads": [
+								{
+									"roads": "LineHorizontal",
+									"mode": "Hard_NoRotate"
+								},
+								{
+									"roads": "LineHorizontal",
+									"mode": "Generated_New"
+								}
+							]
 						},
 						{
 							"x": 2,
 							"y": 0,
-							"defaultRoads": "TLeft"
+							"defaultRoads": [
+								{
+									"roads": "TLeft",
+									"mode": "Hard_NoRotate"
+								},
+								{
+									"roads": "Cross",
+									"mode": "Generated_New"
+								}
+							]
 						}
 					],
 					"pivot": {
@@ -147,22 +219,58 @@
 						{
 							"x": 0,
 							"y": 1,
-							"defaultRoads": "LineVertical"
+							"defaultRoads": [
+								{
+									"roads": "LineVertical",
+									"mode": "Hard_NoRotate"
+								},
+								{
+									"roads": "LineVertical",
+									"mode": "Generated_New"
+								}
+							]
 						},
 						{
 							"x": -1,
 							"y": 0,
-							"defaultRoads": "LineHorizontal"
+							"defaultRoads": [
+								{
+									"roads": "LineHorizontal",
+									"mode": "Hard_NoRotate"
+								},
+								{
+									"roads": "TUp",
+									"mode": "Generated_New"
+								}
+							]
 						},
 						{
 							"x": 0,
 							"y": 0,
-							"defaultRoads": "TUp"
+							"defaultRoads": [
+								{
+									"roads": "TUp",
+									"mode": "Hard_NoRotate"
+								},
+								{
+									"roads": "TUp",
+									"mode": "Generated_New"
+								}
+							]
 						},
 						{
 							"x": 1,
 							"y": 0,
-							"defaultRoads": "LineHorizontal"
+							"defaultRoads": [
+								{
+									"roads": "LineHorizontal",
+									"mode": "Hard_NoRotate"
+								},
+								{
+									"roads": "TUp",
+									"mode": "Generated_New"
+								}
+							]
 						}
 					],
 					"pivot": {
@@ -194,22 +302,58 @@
 						{
 							"x": -1,
 							"y": 0,
-							"defaultRoads": "TRight"
+							"defaultRoads": [
+								{
+									"roads": "TRight",
+									"mode": "Hard_NoRotate"
+								},
+								{
+									"roads": "LineHorizontal",
+									"mode": "Generated_New"
+								}
+							]
 						},
 						{
 							"x": 0,
 							"y": 0,
-							"defaultRoads": "LineHorizontal"
+							"defaultRoads": [
+								{
+									"roads": "LineHorizontal",
+									"mode": "Hard_NoRotate"
+								},
+								{
+									"roads": "LineHorizontal",
+									"mode": "Generated_New"
+								}
+							]
 						},
 						{
 							"x": 1,
 							"y": 0,
-							"defaultRoads": "CornerUpLeft"
+							"defaultRoads": [
+								{
+									"roads": "CornerUpLeft",
+									"mode": "Hard_NoRotate"
+								},
+								{
+									"roads": "CornerUpLeft",
+									"mode": "Generated_New"
+								}
+							]
 						},
 						{
 							"x": 1,
 							"y": 1,
-							"defaultRoads": "LineVertical"
+							"defaultRoads": [
+								{
+									"roads": "LineVertical",
+									"mode": "Hard_NoRotate"
+								},
+								{
+									"roads": "TLeft",
+									"mode": "Generated_New"
+								}
+							]
 						}
 					],
 					"pivot": {
@@ -241,22 +385,58 @@
 						{
 							"x": -1,
 							"y": 1,
-							"defaultRoads": "LineVertical"
+							"defaultRoads": [
+								{
+									"roads": "LineVertical",
+									"mode": "Hard_NoRotate"
+								},
+								{
+									"roads": "TRight",
+									"mode": "Generated_New"
+								}
+							]
 						},
 						{
 							"x": -1,
 							"y": 0,
-							"defaultRoads": "CornerUpRight"
+							"defaultRoads": [
+								{
+									"roads": "CornerUpRight",
+									"mode": "Hard_NoRotate"
+								},
+								{
+									"roads": "CornerUpRight",
+									"mode": "Generated_New"
+								}
+							]
 						},
 						{
 							"x": 0,
 							"y": 0,
-							"defaultRoads": "LineHorizontal"
+							"defaultRoads": [
+								{
+									"roads": "LineHorizontal",
+									"mode": "Hard_NoRotate"
+								},
+								{
+									"roads": "LineHorizontal",
+									"mode": "Generated_New"
+								}
+							]
 						},
 						{
 							"x": 1,
 							"y": 0,
-							"defaultRoads": "TLeft"
+							"defaultRoads": [
+								{
+									"roads": "TLeft",
+									"mode": "Hard_NoRotate"
+								},
+								{
+									"roads": "LineHorizontal",
+									"mode": "Generated_New"
+								}
+							]
 						}
 					],
 					"pivot": {
@@ -288,22 +468,58 @@
 						{
 							"x": -1,
 							"y": 0,
-							"defaultRoads": "TRight"
+							"defaultRoads": [
+								{
+									"roads": "TRight",
+									"mode": "Hard_NoRotate"
+								},
+								{
+									"roads": "TUp",
+									"mode": "Generated_New"
+								}
+							]
 						},
 						{
 							"x": 0,
 							"y": 0,
-							"defaultRoads": "CornerUpLeft"
+							"defaultRoads": [
+								{
+									"roads": "CornerUpLeft",
+									"mode": "Hard_NoRotate"
+								},
+								{
+									"roads": "CornerUpLeft",
+									"mode": "Generated_New"
+								}
+							]
 						},
 						{
 							"x": 0,
 							"y": 1,
-							"defaultRoads": "CornerDownRight"
+							"defaultRoads": [
+								{
+									"roads": "CornerDownRight",
+									"mode": "Hard_NoRotate"
+								},
+								{
+									"roads": "CornerDownRight",
+									"mode": "Generated_New"
+								}
+							]
 						},
 						{
 							"x": 1,
 							"y": 1,
-							"defaultRoads": "TLeft"
+							"defaultRoads": [
+								{
+									"roads": "TLeft",
+									"mode": "Hard_NoRotate"
+								},
+								{
+									"roads": "TDown",
+									"mode": "Generated_New"
+								}
+							]
 						}
 					],
 					"pivot": {
@@ -335,22 +551,58 @@
 						{
 							"x": -1,
 							"y": 1,
-							"defaultRoads": "TRight"
+							"defaultRoads": [
+								{
+									"roads": "TRight",
+									"mode": "Hard_NoRotate"
+								},
+								{
+									"roads": "TDown",
+									"mode": "Generated_New"
+								}
+							]
 						},
 						{
 							"x": 0,
 							"y": 1,
-							"defaultRoads": "CornerDownLeft"
+							"defaultRoads": [
+								{
+									"roads": "CornerDownLeft",
+									"mode": "Hard_NoRotate"
+								},
+								{
+									"roads": "CornerDownLeft",
+									"mode": "Generated_New"
+								}
+							]
 						},
 						{
 							"x": 0,
 							"y": 0,
-							"defaultRoads": "CornerUpRight"
+							"defaultRoads": [
+								{
+									"roads": "CornerUpRight",
+									"mode": "Hard_NoRotate"
+								},
+								{
+									"roads": "CornerUpRight",
+									"mode": "Generated_New"
+								}
+							]
 						},
 						{
 							"x": 1,
 							"y": 0,
-							"defaultRoads": "TLeft"
+							"defaultRoads": [
+								{
+									"roads": "TLeft",
+									"mode": "Hard_NoRotate"
+								},
+								{
+									"roads": "TUp",
+									"mode": "Generated_New"
+								}
+							]
 						}
 					],
 					"pivot": {
@@ -1643,6 +1895,103 @@
 			}
 		},
 		{
+			"name": "mode",
+			"columns": [
+				{
+					"typeStr": "0",
+					"name": "id",
+					"kind": null,
+					"scope": null
+				},
+				{
+					"typeStr": "1",
+					"name": "name",
+					"kind": "localizable"
+				},
+				{
+					"typeStr": "3",
+					"name": "startLevel"
+				},
+				{
+					"typeStr": "3",
+					"name": "targetCount",
+					"kind": null,
+					"documentation": "-1 for endless"
+				},
+				{
+					"typeStr": "17",
+					"name": "minoGeneration",
+					"opt": true
+				},
+				{
+					"typeStr": "1",
+					"name": "notes",
+					"kind": null
+				}
+			],
+			"lines": [
+				{
+					"id": "Normal",
+					"name": "Normal",
+					"minoGeneration": {
+						"minSeparateExits": 2,
+						"maxExitBlocks": 2,
+						"minRoaded": 3,
+						"minExitBlocks": 2
+					},
+					"startLevel": 1,
+					"targetCount": 4,
+					"notes": ""
+				},
+				{
+					"id": "Generated_New",
+					"name": "Hard",
+					"startLevel": 2,
+					"targetCount": 10,
+					"notes": ""
+				},
+				{
+					"id": "Hard_NoRotate",
+					"name": "Cheese",
+					"startLevel": 4,
+					"targetCount": 10,
+					"notes": "Can be cheesed by never rotating anything, and making sure not to use the side exit of T pieces"
+				}
+			],
+			"separators": [],
+			"props": {}
+		},
+		{
+			"name": "mode@minoGeneration",
+			"props": {
+				"hide": true,
+				"isProps": true
+			},
+			"separators": [],
+			"lines": [],
+			"columns": [
+				{
+					"typeStr": "3",
+					"name": "minRoaded",
+					"documentation": "Minimum blocks that need to have roads"
+				},
+				{
+					"typeStr": "3",
+					"name": "minSeparateExits",
+					"documentation": "Sets of road exits that are on separate blocks and different directions"
+				},
+				{
+					"typeStr": "3",
+					"name": "maxExitBlocks",
+					"documentation": "Maximum blocks that can have exits"
+				},
+				{
+					"typeStr": "3",
+					"name": "minExitBlocks"
+				}
+			]
+		},
+		{
 			"name": "rotation@rotate",
 			"props": {
 				"hide": true
@@ -1706,8 +2055,28 @@
 					"kind": null
 				},
 				{
+					"typeStr": "8",
+					"name": "defaultRoads"
+				}
+			]
+		},
+		{
+			"name": "mino@blocks@defaultRoads",
+			"props": {
+				"hide": true,
+				"isProps": true
+			},
+			"separators": [],
+			"lines": [],
+			"columns": [
+				{
 					"typeStr": "6:road",
-					"name": "defaultRoads",
+					"name": "roads",
+					"kind": null
+				},
+				{
+					"typeStr": "6:mode",
+					"name": "mode",
 					"kind": null
 				}
 			]

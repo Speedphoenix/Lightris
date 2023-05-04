@@ -29,19 +29,6 @@ typedef InputConfig = {
 
 	static final TITLE = "The Roadtrip";
 
-	// Minimum blocks that need to have roads on a piece
-    static final MIN_ROADED_PER_PIECE = 3;
-	// Sets of road exits on a mino that are on separate blocks and different directions
-    static final MIN_SEPARATE_EXITS = 2;
-	// Maximum blocks that can have exits on a piece
-	static final MAX_EXIT_BLOCKS = 2;
-	static final MIN_EXIT_BLOCKS = 2;
-
-	// static final MIN_ROADED_PER_PIECE = 4;
-	// static final MAX_EXIT_BLOCKS = 3;
-
-	static var USE_DEFAULT_ROADS = true; // not constant
-
     static final MINO_COUNT = 7;
 	static final NEXT_QUEUE_SIZE = 5;
 	static final FIRST_TARGET_LINE = 12;
@@ -49,7 +36,6 @@ typedef InputConfig = {
 	static final END_TARGET_SPACING = 8;
 	static final TARGET_COL_MIN = 1;
 	static final TARGET_COL_MAX = 3;
-	static final TARGET_COUNT = [4, 10, 10];
 	static final SCROLL_LINE = 11; // dropping above this scrolls
 
     static final SIDE = 32;
@@ -86,7 +72,6 @@ typedef InputConfig = {
 		2.36,
 	];
 
-	static final START_LV = [1, 4, 8];
 	static final LOCK_DELAY = 0.5;
 	static final LOCK_RESET_MAX = 10;
 
