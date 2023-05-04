@@ -8,10 +8,9 @@ using Main;
 // TODO TOMORROW
 // Menu principal + credits
 // 		How to play (controls, objective, clearing a line doesn't do anything)
-// 		Make all the texts images
+// 		Make all the texts images?
 // garbage
 // better generated pieces?
-// le camion
 // fix that L rotation on the rotation table
 // increase level, display level
 // getting locked feedback
@@ -987,16 +986,31 @@ class Board {
 			nextQueue[i].updatePos(true);
 		}
 	}
-	function nextMino(?remove = true) {
-		if (current != null && remove)
-			current.obj.remove();
-		current = nextQueue.shift();
+	function doSpawnMino(m: Piece) {
+		current = m;
 		boardObj.addChild(current.obj);
 		current.reset();
 		fillNext();
 		updateConnections();
+		checkDefeat();
+	}
+	function nextMino(?remove = true, ?instant = false) {
+		if (current != null && remove)
+			current.obj.remove();
+		current = null;
+		if (instant)
+			doSpawnMino(nextQueue.shift());
 		heldOnce = false;
 		resetBlocking(false);
+		nextMinoTimer = 0.;
+	}
+	var nextMinoTimer = 0.;
+	function updateNextMino(dt: Float) {
+		if (current != null)
+			return;
+		nextMinoTimer += dt;
+		if (nextMinoTimer > Const.ENTRY_DELAY)
+			doSpawnMino(nextQueue.shift());
 	}
 	public function collides(m: Piece, offsetx = 0, offsety = 0) {
 		for (b in m.blocks) {
@@ -1052,10 +1066,9 @@ class Board {
 		lockPiece(current);
 		checkScroll(current);
 		nextMino();
-		checkDefeat();
 	}
 	function checkDefeat() {
-		if (gameIsOver)
+		if (gameIsOver || current == null)
 			return;
 		if (collides(current)) {
 			triggerDefeat(TopOut);
@@ -1130,9 +1143,7 @@ class Board {
 		} else {
 			var a = hold;
 			hold = current;
-			current = a;
-			current.reset();
-			boardObj.addChild(current.obj);
+			doSpawnMino(a);
 		}
 		hold.reset();
 		hold.x = 0;
@@ -1209,7 +1220,7 @@ class Board {
 		allTargets.clear();
 		finalTargets.clear();
 		spawnTargets();
-		nextMino();
+		nextMino(true, true);
 		updateConnections();
 		highestOnBlock = null;
 		if (truck != null)
@@ -1486,25 +1497,34 @@ class Board {
 		if (K.isPressed(K.R)) {
 			clearBoard();
 		}
+		updateScroll(dt);
 		if (!gameIsOver) {
-			if (K.isPressed(Const.config.hardDrop)) {
-				hardDrop();
+			updateNextMino(dt);
+			if (current != null) {
+				if (K.isPressed(Const.config.hardDrop)) {
+					hardDrop();
+				}
 			}
-			if (K.isPressed(Const.config.rotateRight)) {
-				rotate(false);
+			if (current != null) {
+				if (K.isPressed(Const.config.rotateRight)) {
+					rotate(false);
+				}
+				if (K.isPressed(Const.config.rotateLeft)) {
+					rotate(true);
+				}
+				if (K.isPressed(Const.config.hold)) {
+					swapHold();
+				}
 			}
-			if (K.isPressed(Const.config.rotateLeft)) {
-				rotate(true);
+			if (current != null) {
+				updateMove(dt);
+				updateGravity(dt);
 			}
-			if (K.isPressed(Const.config.hold)) {
-				swapHold();
-			}
-			updateMove(dt);
-			updateGravity(dt);
-			updateScroll(dt);
+			if (current != null)
+				current.update(dt);
+			if (phantom != null)
+				phantom.update(dt);
 		}
-		current.update(dt);
-		phantom.update(dt);
 		for (col in board) {
 			for (block in col) {
 				// TODO if visible

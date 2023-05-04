@@ -74,6 +74,7 @@ typedef InputConfig = {
 
 	static final LOCK_DELAY = 0.5;
 	static final LOCK_RESET_MAX = 10;
+	static final ENTRY_DELAY = 0.06;
 
 	static final wasdConfig: InputConfig = {
 		left: K.Q,

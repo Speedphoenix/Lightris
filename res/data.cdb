@@ -1952,7 +1952,7 @@
 				},
 				{
 					"id": "Hard_NoRotate",
-					"name": "Cheese",
+					"name": "Cheesable",
 					"startLevel": 4,
 					"targetCount": 10,
 					"notes": "Can be cheesed by never rotating anything, and making sure not to use the side exit of T pieces"
