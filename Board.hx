@@ -1012,14 +1012,16 @@ class Board {
 		if (nextMinoTimer > Const.ENTRY_DELAY)
 			doSpawnMino(nextQueue.shift());
 	}
-	public function collides(m: Piece, offsetx = 0, offsety = 0) {
+	public function collides(m: Piece, offsetx = 0, offsety = 0, allowPhase = false) {
 		for (b in m.blocks) {
 			var x = b.x + m.x + offsetx;
 			var y = b.y + m.y + offsety;
 			if (x < 0 || x >= board.length || y < 0 || y < targetScroll)
 				return true;
-			if (!blockIsEmpty(x, y))
-				return true;
+			if (!blockIsEmpty(x, y)) {
+				if (!allowPhase || !board[x][y].inf.flags.has(PhaseThrough))
+					return true;
+			}
 		}
 		return false;
 	}
@@ -1096,12 +1098,23 @@ class Board {
 	function getHardDropDiff() {
 		var prev = 0;
 		for (i in 1...(current.y + 1)) {
-			if (collides(current, 0, -i)) {
+			if (collides(current, 0, -i, true)) {
 				break;
+			} else if (!collides(current, 0, -i, false)) {
+				prev = i;
 			}
-			prev = i;
 		}
 		return prev;
+	}
+	function getSoftDropDiff() {
+		for (i in 1...(current.y + 1)) {
+			if (collides(current, 0, -i, true)) {
+				break;
+			} else if (!collides(current, 0, -i, false)) {
+				return i;
+			}
+		}
+		return 0;
 	}
 	function hardDrop() {
 		current.y -= getHardDropDiff();
@@ -1463,7 +1476,7 @@ class Board {
 				currLockReleaseCount++;
 			}
 		}
-		isLocking = collides(current, 0, -1);
+		isLocking = collides(current, 0, -1, true);
 		if (isLocking) {
 			currLock += dt;
 			if (currLockReleaseCount > Const.LOCK_RESET_MAX || currLock >= Const.LOCK_DELAY) {
@@ -1472,8 +1485,9 @@ class Board {
 		}
 	}
 	function softDrop() {
-		if (!collides(current, 0, -1)) {
-			current.y -= 1;
+		var diff = getSoftDropDiff();
+		if (diff > 0) {
+			current.y -= diff;
 			current.updatePos();
 			return true;
 		}

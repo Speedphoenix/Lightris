@@ -35,7 +35,7 @@
 					"kind": null
 				},
 				{
-					"typeStr": "10:AlwaysOn,Empty,HideRoads,AllRoads,IsCasernL,IsCasernR,ForceTruck",
+					"typeStr": "10:AlwaysOn,Empty,HideRoads,AllRoads,IsCasernL,IsCasernR,ForceTruck,PhaseThrough",
 					"name": "flags"
 				},
 				{
@@ -666,7 +666,7 @@
 						"y": 0
 					},
 					"rotation": "None",
-					"flags": 28,
+					"flags": 156,
 					"props": {
 						"activeBlock": "EndLLit"
 					},
@@ -686,7 +686,7 @@
 						"y": 0
 					},
 					"rotation": "None",
-					"flags": 44,
+					"flags": 172,
 					"props": {
 						"activeBlock": "EndRLit"
 					},
@@ -706,7 +706,7 @@
 						"y": 0
 					},
 					"rotation": "None",
-					"flags": 92,
+					"flags": 220,
 					"props": {},
 					"gfx": {
 						"file": "EndLit.png",
@@ -724,7 +724,7 @@
 						"y": 0
 					},
 					"rotation": "None",
-					"flags": 108,
+					"flags": 236,
 					"props": {},
 					"gfx": {
 						"file": "EndLit.png",
@@ -778,7 +778,7 @@
 						"y": 0
 					},
 					"rotation": "None",
-					"flags": 12,
+					"flags": 140,
 					"props": {
 						"activeBlock": "TargetObtained"
 					},
@@ -798,7 +798,7 @@
 						"y": 0
 					},
 					"rotation": "None",
-					"flags": 77,
+					"flags": 205,
 					"props": {},
 					"group": 1,
 					"gfx": {
