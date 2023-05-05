@@ -1386,17 +1386,19 @@ class Board {
 		for (s in starts)
 			fillRec(s.x, s.y);
 
-		if (phantom != null && (phantom.follow != current || current.phantom != phantom)) {
+		if (phantom != null && (phantom.follow != current || current?.phantom != phantom)) {
 			phantom.obj.remove();
 			phantom = new Piece(current, phantomCont);
 		}
-		if (phantom == null)
-			phantom = new Piece(current, phantomCont);
-		phantom.y = current.y - getHardDropDiff();
-		phantom.updatePos();
-		fillPhantom();
-		phantom.updatePos();
-		current.updatePos();
+		if (current != null) {
+			if (phantom == null)
+				phantom = new Piece(current, phantomCont);
+			phantom.y = current.y - getHardDropDiff();
+			phantom.updatePos();
+			fillPhantom();
+			phantom.updatePos();
+			current.updatePos();
+		}
 
 		for (i in 0...board.length) {
 			for (j in 0...board[i].length) {

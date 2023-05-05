@@ -3,13 +3,7 @@ using Extensions;
 
 @:uiComp("button")
 class Button extends h2d.Flow implements h2d.domkit.Object {
-	static var SRC = <button
-		background={bg}
-		padding="15"
-		padding-top="11"
-		content-halign={h2d.Flow.FlowAlign.Middle}
-		min-width="130"
-	>
+	static var SRC = <button>
 		<text id="labelTxt"
 			text={text}
 			font={Main.font}
@@ -32,26 +26,6 @@ class Button extends h2d.Flow implements h2d.domkit.Object {
 		initComponent();
 		enableInteractive = true;
 		interactive.onClick = function(_) onClick();
-		interactive.onOver = function(_) {
-			dom.hover = true;
-			tile.setPosition(1, 0);
-			background.tile = tile;
-		};
-		interactive.onPush = function(_) {
-			dom.active = true;
-			tile.setPosition(2, 0);
-			background.tile = tile;
-		};
-		interactive.onRelease = function(_) {
-			dom.active = false;
-			tile.setPosition(0, 0);
-			background.tile = tile;
-		};
-		interactive.onOut = function(_) {
-			dom.hover = false;
-			tile.setPosition(0, 0);
-			background.tile = tile;
-		};
 	}
 
 	public dynamic function onClick() {
@@ -81,59 +55,56 @@ class MainMenu extends h2d.Flow implements h2d.domkit.Object {
 		<flow class="menu-cont" id
 			fill-width={true}
 			fill-height={true}
-			layout={h2d.Flow.FlowLayout.Stack}
 			content-align="middle middle"
 			scale="1"
 		>
 			<flow class="title-cont"
 				layout="vertical"
-				margin-bottom="180"
 			>
 				<text text={Const.TITLE}
 					scale="3"
 				/>
 			</flow>
-			<flow class="credits"
-				layout={h2d.Flow.FlowLayout.Vertical}
-				spacing="10"
-				margin-left="250"
-			>
-				<text text={"CREATED BY:"}
-					font={Main.font}
-					color="#F8DCC1"
+			<flow class="middle-cont">
+				<flow class="credits"
+					layout={h2d.Flow.FlowLayout.Vertical}
+					spacing="10"
+				>
+					<text text={"CREATED BY:"}
+						font={Main.font}
+						color="#F8DCC1"
+					/>
+					<text text={"Speedphoenix"}/>
+					<text text={"Jean-Phénix De"}/>
+					<text text={"PloucPhoenix"}/>
+				</flow>
+				<flow id="buttons"
+					layout={h2d.Flow.FlowLayout.Vertical}
+					spacing="10"
 				/>
-				<text text={"Speedphoenix"}/>
-				<text text={"Jean-Phénix De"}/>
-				<text text={"PloucPhoenix"}/>
+				<flow class="how-to-play"
+					layout={h2d.Flow.FlowLayout.Vertical}
+					spacing="5"
+				>
+					<text text={"How to play"}
+						font={Main.font}
+						color="#F8DCC1"
+						scale="2"
+					/>
+					<text text={'Connect the roads to the top'}/>
+					<text text={'Save animals on the way to gain points!'}
+						max-width="180"
+						margin-bottom="20"
+					/>
+					<text text={'Move left: ${K.getKeyName(Const.config.left)}'}/>
+					<text text={'Move right: ${K.getKeyName(Const.config.right)}'}/>
+					<text text={'Soft drop: ${K.getKeyName(Const.config.softDrop)}'}/>
+					<text text={'Hard drop: ${K.getKeyName(Const.config.hardDrop)}'}/>
+					<text text={'Rotate right: ${K.getKeyName(Const.config.rotateRight)}'}/>
+					<text text={'Rotate left: ${K.getKeyName(Const.config.rotateLeft)}'}/>
+					<text text={'Hold: ${K.getKeyName(Const.config.hold)}'}/>
+				</flow>
 			</flow>
-			<flow class="how-to-play"
-				layout={h2d.Flow.FlowLayout.Vertical}
-				spacing="5"
-				margin-right="400"
-				margin-top="120"
-			>
-				<text text={"How to play"}
-					font={Main.font}
-					color="#F8DCC1"
-					scale="2"
-				/>
-				<text text={'Connect the roads to the top'}/>
-				<text text={'Save animals on the way to gain points!'}
-					max-width="180"
-					margin-bottom="20"
-				/>
-				<text text={'Move left: ${K.getKeyName(Const.config.left)}'}/>
-				<text text={'Move right: ${K.getKeyName(Const.config.right)}'}/>
-				<text text={'Soft drop: ${K.getKeyName(Const.config.softDrop)}'}/>
-				<text text={'Hard drop: ${K.getKeyName(Const.config.hardDrop)}'}/>
-				<text text={'Rotate right: ${K.getKeyName(Const.config.rotateRight)}'}/>
-				<text text={'Rotate left: ${K.getKeyName(Const.config.rotateLeft)}'}/>
-				<text text={'Hold: ${K.getKeyName(Const.config.hold)}'}/>
-			</flow>
-			<flow id="buttons"
-				layout={h2d.Flow.FlowLayout.Vertical}
-				spacing="10"
-			/>
 		</flow>
 	</main-menu>
 
@@ -159,6 +130,7 @@ class MainMenu extends h2d.Flow implements h2d.domkit.Object {
 
 		style = new h2d.domkit.Style();
 		style.allowInspect = #if debug true #else false #end;
+		style.load(hxd.Res.style, true);
 		style.addObject(this);
 		dom.addClass("root");
 		boardCont.visible = false;

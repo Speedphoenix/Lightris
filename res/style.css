@@ -1,0 +1,28 @@
+button {
+  min-width: 130;
+  background: hgrid("button_bg.png", 3) 4 4;
+  padding: 15;
+  padding-top: 11;
+  content-halign: middle;
+}
+button:hover {
+  background-tile-pos-x: 1;
+}
+button:active {
+  background-tile-pos-x: 2;
+}
+main-menu .menu-cont {
+  layout: vertical;
+  spacing: 60;
+}
+main-menu .menu-cont .middle-cont {
+  layout: horizontal;
+  spacing: 40;
+  content-valign: middle;
+}
+main-menu .menu-cont .middle-cont #buttons {
+  content-halign: middle;
+}
+main-menu .menu-cont .middle-cont #buttons button {
+  min-width: 155;
+}
