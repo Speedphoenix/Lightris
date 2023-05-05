@@ -13,18 +13,19 @@ using Main;
 // better generated pieces?
 // fix that L rotation on the rotation table
 // increase level, display level
+// display the current difficulty
 // getting locked feedback
 // pausing the game
 // limit soft drop lock increase when softdropping
-// hide targets before reaching x lines within/make them non-tinteractible
-// 			it's a pain to hard drop on them
-// display the current difficulty
 
 // for better generated pieces:
 // generate all possibles during startup
 // assign weight on number of exits and road types (4-roads should be rarer)
 // low exits and high exits should be rare
 // maybe allow separate paths if it's 2 and 2 ?
+
+
+// TOMORROW for generated pieces generate all on init
 
 enum RandomMode {
 	FullRandom;
@@ -1388,7 +1389,7 @@ class Board {
 
 		if (phantom != null && (phantom.follow != current || current?.phantom != phantom)) {
 			phantom.obj.remove();
-			phantom = new Piece(current, phantomCont);
+			phantom = null;
 		}
 		if (current != null) {
 			if (phantom == null)
