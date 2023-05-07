@@ -66,22 +66,6 @@ class MainMenu extends h2d.Flow implements h2d.domkit.Object {
 				/>
 			</flow>
 			<flow class="middle-cont">
-				<flow class="credits"
-					layout={h2d.Flow.FlowLayout.Vertical}
-					spacing="10"
-				>
-					<text text={"CREATED BY:"}
-						font={Main.font}
-						color="#F8DCC1"
-					/>
-					<text text={"Speedphoenix"}/>
-					<text text={"Jean-Phénix De"}/>
-					<text text={"PloucPhoenix"}/>
-				</flow>
-				<flow id="buttons"
-					layout={h2d.Flow.FlowLayout.Vertical}
-					spacing="10"
-				/>
 				<flow class="how-to-play"
 					layout={h2d.Flow.FlowLayout.Vertical}
 					spacing="5"
@@ -104,6 +88,22 @@ class MainMenu extends h2d.Flow implements h2d.domkit.Object {
 					<text text={'Rotate left: ${K.getKeyName(Const.config.rotateLeft)}'}/>
 					<text text={'Hold: ${K.getKeyName(Const.config.hold)}'}/>
 				</flow>
+				<flow id="buttons"
+					layout={h2d.Flow.FlowLayout.Vertical}
+					spacing="10"
+				/>
+				<flow class="credits"
+					layout={h2d.Flow.FlowLayout.Vertical}
+					spacing="10"
+				>
+					<text text={"CREATED BY:"}
+						font={Main.font}
+						color="#F8DCC1"
+					/>
+					<text text={"Speedphoenix"}/>
+					<text text={"Jean-Phénix De"}/>
+					<text text={"PloucPhoenix"}/>
+				</flow>
 			</flow>
 		</flow>
 	</main-menu>
@@ -116,6 +116,10 @@ class MainMenu extends h2d.Flow implements h2d.domkit.Object {
 		// tf.dropShadow = { dx : 0.5, dy : 0.5, color : 0xFF0000, alpha : 0.8 };
 
 		for (mode in Data.mode.all) {
+			#if release
+			if (mode.props.noRelease)
+				continue;
+			#end
 			var button = new Button(mode.name, buttons);
 			button.onClick = function() {
 				menuCont.visible = false;

@@ -3,6 +3,7 @@
 -lib domkit
 
 -D domkit_heaps
+-D release
 -js lightris.js
 -main Main
 -cp .

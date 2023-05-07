@@ -1924,6 +1924,11 @@
 					"opt": true
 				},
 				{
+					"typeStr": "17",
+					"name": "props",
+					"kind": null
+				},
+				{
 					"typeStr": "1",
 					"name": "notes",
 					"kind": null
@@ -1941,21 +1946,26 @@
 					},
 					"startLevel": 1,
 					"targetCount": 4,
-					"notes": ""
+					"notes": "",
+					"props": {}
 				},
 				{
 					"id": "Generated_New",
 					"name": "Hard",
-					"startLevel": 2,
+					"startLevel": 4,
 					"targetCount": 10,
-					"notes": ""
+					"notes": "",
+					"props": {}
 				},
 				{
 					"id": "Hard_NoRotate",
 					"name": "Cheesable",
 					"startLevel": 4,
 					"targetCount": 10,
-					"notes": "Can be cheesed by never rotating anything, and making sure not to use the side exit of T pieces"
+					"notes": "Can be cheesed by never rotating anything, and making sure not to use the side exit of T pieces",
+					"props": {
+						"noRelease": true
+					}
 				}
 			],
 			"separators": [],
@@ -1988,6 +1998,23 @@
 				{
 					"typeStr": "3",
 					"name": "minExitBlocks"
+				}
+			]
+		},
+		{
+			"name": "mode@props",
+			"props": {
+				"hide": true,
+				"isProps": true
+			},
+			"separators": [],
+			"lines": [],
+			"columns": [
+				{
+					"typeStr": "2",
+					"name": "noRelease",
+					"opt": true,
+					"kind": null
 				}
 			]
 		},

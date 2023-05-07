@@ -6,6 +6,7 @@
 -D windowSize=1024x800
 -D domkit_heaps
 -D debug
+# -D release
 
 -hl lightris.hl
 -main Main
