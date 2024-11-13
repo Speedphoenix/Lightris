@@ -41,19 +41,48 @@ class SceneBitmap extends h2d.Bitmap implements h2d.domkit.Object {
 	}
 }
 
+@:uiComp("test-ui")
+class TestUI extends h2d.Flow implements h2d.domkit.Object {
+	static var SRC = <test-ui>
+		for (i in arr) {
+			<flow class={"hello-" + i} id="hello2[]"/>
+		}
+		// if (complexCondition) {
+		// 	<flow class="hello" id="hello2"/>
+		// }
+		<text id="fmtText"/>
+		// ${
+		// 	if (complexCondition)
+		// 		<flow class="hello" id="hello2"/>
+		// 	else
+		// 		<flow class="helloelse" id/>
+		// }
+		// <flow class="after-flow"/>
+		// <flow class="after-flow2" id/>
+	</test-ui>
+
+    public function new(?parent) {
+		super(parent);
+		var complexCondition = false;
+		var arr = [1, 5, 2, 4, 6];
+
+		initComponent();
+	}
+}
+
 @:uiComp("board-ui")
 class BoardUI extends h2d.Flow implements h2d.domkit.Object {
     static var SRC = <board-ui
 		fill-width={true}
 		content-halign={h2d.Flow.FlowAlign.Middle}
-		spacing={{x: 10, y: 0}}
+		spacing={{x: 10., y: 0.}}
 	>
 		<flow class="left-cont"
 			margin-top={topMargin}
 			fill-height={true}
 			layout={h2d.Flow.FlowLayout.Vertical}
 			valign={h2d.Flow.FlowAlign.Top}
-			spacing={{x: 0, y: pad}}
+			spacing={{x: 0., y: pad}}
 			height={boardHeight}
 		>
 			<flow class="hold-cont" id
@@ -62,7 +91,7 @@ class BoardUI extends h2d.Flow implements h2d.domkit.Object {
 				padding={padding}
 				layout={h2d.Flow.FlowLayout.Vertical}
 				content-halign={h2d.Flow.FlowAlign.Middle}
-				spacing={{x: 0, y: pad}}
+				spacing={{x: 0., y: pad}}
 			>
 				<text text={"HOLD"}/>
 				<flow id="currHold" public
@@ -77,13 +106,13 @@ class BoardUI extends h2d.Flow implements h2d.domkit.Object {
 				padding={padding}
 				layout={h2d.Flow.FlowLayout.Vertical}
 				content-halign={h2d.Flow.FlowAlign.Right}
-				spacing={{x: 0, y: 15}}
+				spacing={{x: 0., y: 15.}}
 				min-width={168}
 				min-height={140}
 			>
 				<text id="score"/>
 				<flow id="animalsCont"
-					spacing={{x: 15, y: 0}}
+					spacing={{x: 15., y: 0.}}
 					valign={h2d.Flow.FlowAlign.Bottom}
 				/>
 			</flow>
@@ -94,7 +123,7 @@ class BoardUI extends h2d.Flow implements h2d.domkit.Object {
 			background={panelBG}
 			margin-top={topMargin}
 			padding={padding}
-			spacing={{x: 0, y: pad}}
+			spacing={{x: 0., y: pad}}
 			layout={h2d.Flow.FlowLayout.Vertical}
 			content-halign={h2d.Flow.FlowAlign.Middle}
 		>
@@ -122,12 +151,13 @@ class BoardUI extends h2d.Flow implements h2d.domkit.Object {
 		var topMargin = Const.BOARD_TOP_EXTRA * Const.SIDE - 3;
 		var pieceWidth = 4 * Const.SIDE;
 		var pieceHeight = 2 * Const.SIDE;
-		var pad = 20;
+		var pad = 20.;
+		var ipad = 20;
 		var padding = {
-			top: pad,
-			right: pad,
-			bottom: pad - 1, // mod 4
-			left: pad,
+			top: ipad,
+			right: ipad,
+			bottom: ipad - 1, // mod 4
+			left: ipad,
 		};
 		var boardHeight = Const.BOARD_HEIGHT * Const.SIDE;
 
